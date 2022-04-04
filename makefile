@@ -120,7 +120,7 @@ list-variables:
 ############################################################################
 # Tests                                                                    #
 ############################################################################
-installcheck: test-gitignore test-directory_listing.txt test-README.md test-LICENSE.md ## Run the pre-installation test suite.
+installcheck: test-gitignore test-directory_listing.txt test-README-TEMPLATE.md test-README.md test-LICENSE.md ## Run the pre-installation test suite.
 
 check: installcheck test-brew_packages_base.txt test-brew_packages_installed.txt test-requirements.txt test-makefile_graph.png ## Executes all test suites.
 
@@ -128,6 +128,9 @@ test-gitignore: .gitignore
 	$(test-dependent-file)
 
 test-README.md: README.md
+	$(test-dependent-file)
+
+test-README-TEMPLATE.md: README-TEMPLATE.md
 	$(test-dependent-file)
 
 test-LICENSE.md: LICENSE.md
@@ -152,7 +155,7 @@ test-makefile_graph.png: makefile_graph.png
 ############################################################################
 # Installation - Base Software                                             #
 ############################################################################
-install: install-pip-packages .gitignore check ## Run once when setting up a new project.
+install: install-pip-packages .gitignore git-init check ## Run once when setting up a new project.
 
 brew_packages_base.txt: .FORCE
 	@(echo "$(HOMEBREW-PACKAGES)" | sed -e 's/ /\n/g') > $@
@@ -201,6 +204,9 @@ install-pip-packages: requirements_base.txt install-python-local-virtualenv
 # 	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"bash shell configuration updated.\" 
 #
 ############################################################################
+
+git-init: 
+	@git init
 
 ############################################################################
 # Utility commands to setup git for a user.
@@ -272,7 +278,7 @@ update-pip-packages: requirements_base.txt
 ############################################################################
 uninstall: uninstall-files uninstall-virtualenv ## Uninstalls the project files.
 
-uninstall-files: FILES=.gitignore README.md LICENSE.md brew_packages_*.txt directory_listing.txt makefile_graph.png requirements_base.txt requirements.txt .python-version
+uninstall-files: FILES=.gitignore README-TEMPLATE.md LICENSE.md brew_packages_*.txt directory_listing.txt makefile_graph.png requirements_base.txt requirements.txt .python-version
 uninstall-files: 
 	$(uninstall-file-list)
 
@@ -297,7 +303,7 @@ uninstall-virtualenv:
 	@echo "*.DS_Store" >> $@
 	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Created $@\"
 
-README.md: LICENSE.md
+README-TEMPLATE.md: LICENSE.md
 	@echo "# $(PROJECT-NAME)" >> $@
 	@echo "## Brief Description" >> $@
 	@echo "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.  " >> $@
@@ -374,6 +380,3 @@ LICENSE.md:
 	@echo "OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE" >> $@
 	@echo "SOFTWARE." >> $@
 	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Created $@\"
-
-foo:
-	echo "Copyright (c) $(shell date -u +"%Y") $(PROJECT-CONTACT)"
