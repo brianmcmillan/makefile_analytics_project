@@ -1,5 +1,6 @@
 .
 ├── LICENSE.md
+├── README-TEMPLATE.md
 ├── README.md
 ├── brew_packages_base.txt
 ├── brew_packages_installed.txt
@@ -9,4 +10,4 @@
 ├── requirements.txt
 └── requirements_base.txt
 
-0 directories, 9 files
+0 directories, 10 files
