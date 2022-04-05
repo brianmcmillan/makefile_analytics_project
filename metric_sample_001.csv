@@ -1,0 +1,9 @@
+provider_code,node_code,node_qualifier,metric_code,value_dts,metric_value
+/Users/brianmcmillan/Documents/GitHub/makefile_analytics_project/makefile.record_count-REF_CALENDAR_001.csv,makefile_analytics_project.db.REF_CALENDAR_001,COUNT,record_count,2022-04-05T21:48:48Z,2193
+/Users/brianmcmillan/Documents/GitHub/makefile_analytics_project/makefile.record_count-REF_CALENDAR_001.csv,makefile_analytics_project.db.REF_CALENDAR_001,COUNT,record_count,2022-04-05T21:49:00Z,2193
+/Users/brianmcmillan/Documents/GitHub/makefile_analytics_project/makefile.record_count-REF_CALENDAR_001.csv,makefile_analytics_project.db.REF_CALENDAR_001,COUNT,record_count,2022-04-05T21:49:03Z,2193
+/Users/brianmcmillan/Documents/GitHub/makefile_analytics_project/makefile.record_count-REF_CALENDAR_001.csv,makefile_analytics_project.db.REF_CALENDAR_001,COUNT,record_count,2022-04-05T21:55:34Z,2193
+/Users/brianmcmillan/Documents/GitHub/makefile_analytics_project/makefile.record_count-REF_CALENDAR_001.csv ,makefile_analytics_project.db.REF_CALENDAR_001 ,COUNT ,record_count ,2022-04-05T22:02:41Z ,2193
+/Users/brianmcmillan/Documents/GitHub/makefile_analytics_project/makefile.record_count-REF_CALENDAR_001.csv ,makefile_analytics_project.db.REF_CALENDAR_001 ,COUNT ,record_count ,2022-04-05T22:03:50Z ,2193
+/Users/brianmcmillan/Documents/GitHub/makefile_analytics_project/makefile.record_count-REF_CALENDAR_001.csv,makefile_analytics_project.db.REF_CALENDAR_001 ,COUNT ,record_count ,2022-04-05T22:04:51Z ,2193
+/Users/brianmcmillan/Documents/GitHub/makefile_analytics_project/makefile.record_count-REF_CALENDAR_001.csv,makefile_analytics_project.db.REF_CALENDAR_001,COUNT,record_count,2022-04-05T22:05:23Z,2193

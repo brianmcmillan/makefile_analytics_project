@@ -65,6 +65,50 @@ define makefile-graph
 	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Created makefile diagram at $@\"
 endef
 
+define test-database
+	@[[ -f $(DATABASE-PATH) ]] \
+	&& true \
+	|| echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [WARNING]    $@     \"testing for $(DATABASE) did not find $(DATABASE-PATH)\"
+endef
+
+define execute-sql
+	@#<verb>-<table_name>(colon)(space)<path/to/<query_file>.sql> [<path/to/database.db> <dependent tables>]
+	$(shell $(SQLITE3) $(DATABASE-PATH) ".read $<" ".quit")
+	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Executed $< on $(DATABASE)\"
+endef
+
+define test-table
+	@#test-<table_name>(colon)(space)TABLENAME=<table_name>
+	@#test-<table_name>(colon)(space)
+	@[[ $(shell $(SQLITE3) $(DATABASE-PATH) ".tables $(TABLENAME)" ".quit") == $(TABLENAME) ]] \
+	&& true \
+	|| echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [FAIL]    $@    \"Table $(TABLENAME) not found\" 
+endef
+
+define record-count-table
+	@#record-count-<table name>(colon)(space)TABLENAME=<table_name>
+	@#record-count-<table name>(colon)(space)
+	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"$(shell $(SQLITE3) $(DATABASE-PATH) "SELECT COUNT(*) || ' records in $(DATABASE).$(TABLENAME)' FROM [$(TABLENAME)]" ".quit")\"
+endef
+
+define er-diagram
+	@#<path/to/diagram.type>(colon)(space)DBFILEPATH=<path/to/database_name.db>
+	@#<path/to/diagram.type>(colon)(space)REL_FILE="<path/to/relationship_file.txt>"
+	@#<path/to/diagram.type>(colon)(space)<table_name(s)>"
+	@#Types can be er, pdf, png, dot
+	@$(ERALCHEMY) -i sqlite:///$(DBFILEPATH) -o tmp/$(subst .,,$(notdir $(DBFILEPATH))).er
+	@cat tmp/$(subst .,,$(notdir $(DBFILEPATH))).er $(REL_FILE) > tmp/$(subst .,,$(notdir $(DBFILEPATH)))_2.er || true
+	@$(ERALCHEMY) -i tmp/$(subst .,,$(notdir $(DBFILEPATH)))_2.er -o $@
+	@rm -f tmp/$(subst .,,$(notdir $(DBFILEPATH)))*.er
+	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Executed er-digram and exported to $@\"
+endef
+
+define metric-record_count
+	@#record_count-<TABLE_NAME.CSV>(colon)(space)TABLENAME=<TABLE_NAME>
+	@#record_count-<TABLE_NAME.CSV>(colon)(space)<path/to/metric_sample.csv>
+	@echo $(PROJECT-PATH)/$(firstword $(MAKEFILE_LIST)).$@,$(DATABASE).$(TABLENAME),"COUNT",record_count,$(shell date -u +"%Y-%m-%dT%H:%M:%SZ"),$(shell $(SQLITE3) $(DATABASE-PATH) "SELECT COUNT(*) FROM [$(TABLENAME)]" ".quit") >> $<
+endef	
+
 ############################################################################
 # Variables                                                                #
 ############################################################################
@@ -74,16 +118,22 @@ PYTHON-VERSION := 3.10.2
 PROJECT-PATH := $(shell pwd)
 PROJECT-NAME := $(notdir $(shell pwd))
 PROJECT-CONTACT := "brian mcmillan - brian[at]minimumviablearchitecture[dot]com"
+DATABASE := $(PROJECT-NAME).db
+DATABASE-PATH :=$(PROJECT-PATH)/$(PROJECT-NAME).db
 
 # Program locations (which <utility>)
 SHELL := /bin/bash
 BREW := /usr/local/bin/brew
 TREE := /usr/local/bin/tree
 GRAPHVIZDOT := /usr/local/bin/dot
+SQLITE3 := /usr/local/bin/sqlite3
 PYENVDIR := ~/.pyenv/versions/$(PYTHON-VERSION)/envs/$(PROJECT-NAME)/bin
 PYTHON := $(PYENVDIR)/python
 PIP := $(PYENVDIR)/pip
 NODEGRAPH := $(PYENVDIR)/makefile2dot
+SQLITEUTILS := $(PYENVDIR)/sqlite-utils
+NODEGRAPH := $(PYENVDIR)/makefile2dot
+ERALCHEMY := $(PYENVDIR)/eralchemy
 
 #######################################
 all: installcheck initial-documentation ## Executes the default make task.
@@ -151,6 +201,19 @@ test-requirements.txt: requirements.txt
 test-makefile_graph.png: makefile_graph.png
 	$(test-dependent-file)
 
+#------------------------------------------------
+test-database: create-database
+	$(test-database)
+
+test-REF_CALENDAR_001_create.sql: REF_CALENDAR_001_create.sql
+	$(test-dependent-file)
+
+test-REF_CALENDAR_001: TABLENAME = REF_CALENDAR_001
+test-REF_CALENDAR_001: create-REF_CALENDAR_001 test-REF_CALENDAR_001_create.sql
+	$(test-table)
+
+test-metric_sample_001.csv: metric_sample_001.csv
+	$(test-dependent-file)
 
 ############################################################################
 # Installation - Base Software                                             #
@@ -179,6 +242,9 @@ install-python-local-virtualenv:
 requirements_base.txt: .FORCE
 	@echo makefile2dot==1.0.2 > $@
 	@echo pygraphviz==1.9 >> $@
+	@echo sqlite-utils==3.22.1 >> $@
+	@echo ERAlchemy==1.2.10 >> $@
+	@echo SQLAlchemy==1.3.24 >> $@
 
 requirements.txt: requirements_base.txt
 	@$(shell pyenv which pip) freeze > $@
@@ -189,6 +255,7 @@ install-pip-packages: requirements_base.txt install-python-local-virtualenv
 	@$(shell pyenv which pip) install -r $<
 	@$(shell pyenv which pip) freeze > requirements.txt
 	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Python pip packages installed - requirements.txt\"
+
 
 
 ############################################################################
@@ -214,40 +281,6 @@ git-init:
 # git config --global user.email <email>
 # git config --global color.ui auto
 ############################################################################
-
-# install-xcode: update-macos
-# 	@sudo xcode-select --install || true
-# 	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"xcode installed\" 
-
-# install-homebrew: install-xcode
-# 	@/bin/bash -c "$$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-# 	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Homebrew software installed\" 
-
-# install-brew-packages: install-homebrew
-# 	@$(BREW) install $(HOMEBREW-PACKAGES)
-# 	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Homebrew packages installed - $(HOMEBREW-PACKAGES)\"
-
-
-
-# https://github.com/pyenv/pyenv/wiki#suggested-build-environment
-# https://github.com/pyenv/pyenv/#basic-github-checkout
-# Reference: https://faun.pub/pyenv-multi-version-python-development-on-mac-578736fb91aa
-
-# install-python-global-virtualenv: install-brew-packages
-# 	@pyenv install $(PYTHON-VERSION)
-# 	@pyenv global $(PYTHON-VERSION)
-# 	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Python $(PYTHON-VERSION) installed with pyenv\" 
-# 	@$(shell pyenv which pip) install --upgrade pip
-# 	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Python location - $(shell pyenv which python)\" 
-# 	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"PIP location - $(shell pyenv which pip)\" 
-
-#install-python-local-virtualenv: install-python-global-virtualenv
-
-
-
-
-
-
 
 ############################################################################
 # Update                                                                   #
@@ -278,7 +311,8 @@ update-pip-packages: requirements_base.txt
 ############################################################################
 uninstall: uninstall-files uninstall-virtualenv ## Uninstalls the project files.
 
-uninstall-files: FILES=.gitignore README-TEMPLATE.md LICENSE.md brew_packages_*.txt directory_listing.txt makefile_graph.png requirements_base.txt requirements.txt .python-version
+uninstall-files: FILES=.gitignore README-TEMPLATE.md LICENSE.md brew_packages_*.txt directory_listing.txt \
+makefile_graph.png requirements_base.txt requirements.txt .python-version *.db metric_sample_001.csv
 uninstall-files: 
 	$(uninstall-file-list)
 
@@ -380,3 +414,74 @@ LICENSE.md:
 	@echo "OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE" >> $@
 	@echo "SOFTWARE." >> $@
 	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Created $@\"
+
+############################################################################
+# Configure standard load file targets                                     #
+# Create empty csv files for standard data structures                      #
+############################################################################
+init-load-files: test-metric_sample_001.csv
+
+metric_sample_001.csv: 
+	@echo provider_code,node_code,node_qualifier,metric_code,value_dts,metric_value > $@
+	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Created $@\"
+
+
+
+
+############################################################################
+# Configure Database                                                       #
+############################################################################
+# Create the default project database 
+init-tables: metric-REF_CALENDAR_001 init-load-files
+
+create-database: 
+	$(SQLITEUTILS) create-database $(DATABASE) --enable-wal
+	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Created database in WAL mode - $(DATABASE)\"
+
+# Create database reference tables 
+create-REF_CALENDAR_001: REF_CALENDAR_001_create.sql test-database
+	$(execute-sql)
+
+metric-REF_CALENDAR_001: TABLENAME=REF_CALENDAR_001
+metric-REF_CALENDAR_001: test-REF_CALENDAR_001
+	$(record-count-table)
+
+
+############################################################################
+# Collect Metrics                                                          #
+# Append the record_count metric to the metric_sample csv file.            #
+# provider_code,node_code,node_qualifier,metric_code,value_dts,metric_value#
+############################################################################
+calculate-metrics: test-metric_sample_001.csv record_count-REF_CALENDAR_001.csv
+
+record_count-REF_CALENDAR_001.csv: TABLENAME=REF_CALENDAR_001
+record_count-REF_CALENDAR_001.csv: metric_sample_001.csv
+	$(metric-record_count)
+
+database_schema.png: DBFILEPATH=$(DATABASE)
+database_schema.png: REL_FILE=""
+database_schema.png: 
+	$(er-diagram)
+
+
+
+
+field_count_check-metric_sample_001.csv: EXPECTED=6
+field_count_check-metric_sample_001.csv: metric_sample_001.csv
+	@[[ $$(datamash -t, check $(EXPECTED) fields < $<) ]] \
+	&& true \
+	|| echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [FAIL]    $@    \"Expected fields not equal to $(EXPECTED)\"
+
+number_check-metric_sample_001.csv: COLUMN=6
+number_check-metric_sample_001.csv: metric_sample_001.csv
+	@[[ $$(datamash -t, --header-in sum $(COLUMN) < metric_sample_001.csv) ]] \
+	&& true \
+	|| echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [FAIL]    $@    \"Expected numeric data in column $(COLUMN)\"
+
+regex_check-metric_sample_001.csv-C3: COLUMN=3
+regex_check-metric_sample_001.csv-C3: REGEX=^[[:space:]\"a-zA-Z0-9\/,.:_-]+$$
+regex_check-metric_sample_001.csv-C3: metric_sample_001.csv
+	@[[ $$(datamash -t, --header-in unique $(COLUMN) < metric_sample_001.csv) =~ $(REGEX) ]] \
+	&& true \
+	|| echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [FAIL]    $@    \"Column $(COLUMN) - $(REGEX) not matched\"	
+

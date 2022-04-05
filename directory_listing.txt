@@ -2,12 +2,17 @@
 ├── LICENSE.md
 ├── README-TEMPLATE.md
 ├── README.md
+├── REF_CALENDAR_001_create.sql
 ├── brew_packages_base.txt
 ├── brew_packages_installed.txt
 ├── directory_listing.txt
 ├── makefile
+├── makefile_analytics_project.db
+├── makefile_analytics_project.db-shm
+├── makefile_analytics_project.db-wal
 ├── makefile_graph.png
+├── metric_sample_001.csv
 ├── requirements.txt
 └── requirements_base.txt
 
-0 directories, 10 files
+0 directories, 15 files
