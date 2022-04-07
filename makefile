@@ -68,7 +68,7 @@ endef
 
 define create-database
 	@#create-database(colon)(space)
-	$(SQLITEUTILS) create-database $(DATABASE) --enable-wal
+	@$(SQLITEUTILS) create-database $(DATABASE) --enable-wal
 	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Created database in WAL mode - $(DATABASE)\"
 endef
 
@@ -80,7 +80,7 @@ endef
 
 define execute-sql
 	@#<verb>-<table_name>(colon)(space)<path/to/<query_file>.sql> [<path/to/database.db> <dependent tables>]
-	$(shell $(SQLITE3) $(DATABASE-PATH) ".read $<" ".quit")
+	@$(shell $(SQLITE3) $(DATABASE-PATH) ".read $<" ".quit")
 	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Executed $< on $(DATABASE)\"
 endef
 
@@ -258,7 +258,7 @@ test-requirements.txt test-requirements_base.txt test-gitignore test-python-vers
 check-documentation: test-makefile_graph.png test-makefile_graph.txt test-directory_listing.txt
 
 check-database: test-database test-database_schema.png test-database_schema.er \
-test-REF_CALENDAR_001
+test-REF_CALENDAR_001 test-META_TABLES_001
 
 check-load-files: test-metric_sample_001.csv
 
@@ -312,6 +312,11 @@ test-REF_CALENDAR_001_create.sql: REF_CALENDAR_001_create.sql
 test-REF_CALENDAR_001: TABLENAME = REF_CALENDAR_001
 test-REF_CALENDAR_001: create-REF_CALENDAR_001 test-REF_CALENDAR_001_create.sql
 	$(test-table)
+
+test-META_TABLES_001: TABLENAME = META_TABLES_001
+test-META_TABLES_001: META_TABLES_001
+	$(test-table)
+
 
 test-metric_sample_001.csv: metric_sample_001.csv
 	$(test-dependent-file)
@@ -560,7 +565,7 @@ metric_sample_001.csv:
 # Configure Database                                                       #
 ############################################################################
 # Create the default project database 
-init-tables: metric-REF_CALENDAR_001 check-database
+init-tables: metric-REF_CALENDAR_001 META_TABLES_001 check-database
 
 create-database: 
 	$(create-database)
@@ -572,6 +577,13 @@ create-REF_CALENDAR_001: REF_CALENDAR_001_create.sql test-database
 metric-REF_CALENDAR_001: TABLENAME=REF_CALENDAR_001
 metric-REF_CALENDAR_001: test-REF_CALENDAR_001
 	$(record-count-table)
+
+META_TABLES_001:
+	@$(SQLITE3) $(DATABASE-PATH) "DROP TABLE IF EXISTS '_analyze_tables_';" ".quit"
+	@$(SQLITE3) $(DATABASE-PATH) "DROP TABLE IF EXISTS 'META_TABLES_001';" ".quit"
+	@$(SQLITEUTILS) analyze-tables $(DATABASE-PATH) --save
+	@$(SQLITE3) $(DATABASE-PATH) "ALTER TABLE '_analyze_tables_' RENAME TO 'META_TABLES_001';" ".quit"
+	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"$(shell $(SQLITE3) $(DATABASE-PATH) "SELECT COUNT(*) || ' records in $(DATABASE).META_TABLES_001' FROM META_TABLES_001" ".quit")\"
 
 ############################################################################
 # Collect Metrics                                                          #

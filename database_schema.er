@@ -1,3 +1,12 @@
+[META_TABLES_001]
+    *table {label:"TEXT"}
+    *column {label:"TEXT"}
+    total_rows {label:"INTEGER"}
+    num_null {label:"INTEGER"}
+    num_blank {label:"INTEGER"}
+    num_distinct {label:"INTEGER"}
+    most_common {label:"TEXT"}
+    least_common {label:"TEXT"}
 [REF_CALENDAR_001]
     date {label:"TEXT"}
     date_int {label:"INTEGER"}
