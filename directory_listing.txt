@@ -5,7 +5,10 @@
 ├── REF_CALENDAR_001_create.sql
 ├── brew_packages_base.txt
 ├── brew_packages_installed.txt
+├── database_schema.er
+├── database_schema.png
 ├── directory_listing.txt
+├── er_relationships.txt
 ├── makefile
 ├── makefile_analytics_project.db
 ├── makefile_analytics_project.db-shm
@@ -15,4 +18,4 @@
 ├── requirements.txt
 └── requirements_base.txt
 
-0 directories, 15 files
+0 directories, 18 files

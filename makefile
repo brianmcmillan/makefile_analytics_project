@@ -65,6 +65,12 @@ define makefile-graph
 	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Created makefile diagram at $@\"
 endef
 
+define create-database
+	@#create-database(colon)(space)
+	$(SQLITEUTILS) create-database $(DATABASE) --enable-wal
+	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Created database in WAL mode - $(DATABASE)\"
+endef
+
 define test-database
 	@[[ -f $(DATABASE-PATH) ]] \
 	&& true \
@@ -92,14 +98,12 @@ define record-count-table
 endef
 
 define er-diagram
-	@#<path/to/diagram.type>(colon)(space)DBFILEPATH=<path/to/database_name.db>
-	@#<path/to/diagram.type>(colon)(space)REL_FILE="<path/to/relationship_file.txt>"
-	@#<path/to/diagram.type>(colon)(space)<table_name(s)>"
+	@#<path/to/diagram.type>(colon)(space)<path/to/er_relationships.txt>"
 	@#Types can be er, pdf, png, dot
-	@$(ERALCHEMY) -i sqlite:///$(DBFILEPATH) -o tmp/$(subst .,,$(notdir $(DBFILEPATH))).er
-	@cat tmp/$(subst .,,$(notdir $(DBFILEPATH))).er $(REL_FILE) > tmp/$(subst .,,$(notdir $(DBFILEPATH)))_2.er || true
-	@$(ERALCHEMY) -i tmp/$(subst .,,$(notdir $(DBFILEPATH)))_2.er -o $@
-	@rm -f tmp/$(subst .,,$(notdir $(DBFILEPATH)))*.er
+	@$(ERALCHEMY) -i sqlite:///$(DATABASE-PATH) -o $(subst .,,$(notdir $(DATABASE-PATH))).er
+	@cat $(subst .,,$(notdir $(DATABASE-PATH))).er $< > $(subst .,,$(notdir $(DATABASE-PATH)))_2.er || true
+	@$(ERALCHEMY) -i $(subst .,,$(notdir $(DATABASE-PATH)))_2.er -o $@
+	@rm -f $(subst .,,$(notdir $(DATABASE-PATH)))*.er
 	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Executed er-digram and exported to $@\"
 endef
 
@@ -147,7 +151,7 @@ all: installcheck initial-documentation ## Executes the default make task.
 ############################################################################
 # Documentation                                                            #
 ############################################################################
-documentation: test-makefile_graph.png test-directory_listing.txt ## Builds the documentation files for the build. (e.g. schema docs, data flow diagrams)
+documentation: test-makefile_graph.png test-directory_listing.txt test-database_schema.png test-database_schema.er ## Builds the documentation files for the build. (e.g. schema docs, data flow diagrams)
 
 initial-documentation: test-directory_listing.txt help
 
@@ -161,6 +165,12 @@ directory_listing.txt: .FORCE
 
 makefile_graph.png: .FORCE
 	$(makefile-graph)
+
+database_schema.png: er_relationships.txt .FORCE
+	$(er-diagram)
+
+database_schema.er: er_relationships.txt .FORCE
+	$(er-diagram)
 
 list-variables: 
 	@echo PYENVDIR - $(PYENVDIR)
@@ -199,6 +209,12 @@ test-requirements.txt: requirements.txt
 	$(test-dependent-file)
 
 test-makefile_graph.png: makefile_graph.png
+	$(test-dependent-file)
+
+test-database_schema.png: database_schema.png
+	$(test-dependent-file)
+
+test-database_schema.png: database_schema.er
 	$(test-dependent-file)
 
 #------------------------------------------------
@@ -257,7 +273,6 @@ install-pip-packages: requirements_base.txt install-python-local-virtualenv
 	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Python pip packages installed - requirements.txt\"
 
 
-
 ############################################################################
 # Utility tasks to update shell profiles on macOS.
 # WARNING: These will be appended to the profiles and duplicates will need to be manually removed. 
@@ -312,14 +327,14 @@ update-pip-packages: requirements_base.txt
 uninstall: uninstall-files uninstall-virtualenv ## Uninstalls the project files.
 
 uninstall-files: FILES=.gitignore README-TEMPLATE.md LICENSE.md brew_packages_*.txt directory_listing.txt \
-makefile_graph.png requirements_base.txt requirements.txt .python-version *.db metric_sample_001.csv
+makefile_graph.png requirements_base.txt requirements.txt brew_packages_* .python-version *.db *.db-* \
+metric_sample_001.csv database_schema.* er_relationships.txt REF_CALENDAR_001.sql
 uninstall-files: 
 	$(uninstall-file-list)
 
 uninstall-virtualenv:	
-	@pyenv virtualenv-delete $(PROJECT-NAME)
+	@pyenv virtualenv-delete $(PROJECT-NAME) || true
 	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Virtual environment removed - $(PROJECT-NAME)\"
-	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Pyenv - $(shell pyenv versions)"\
 
 # WARNING: Uninstalling Homebrew *WILL* affect outher applications
 # uninstall-homebrew: .FORCE
@@ -415,6 +430,64 @@ LICENSE.md:
 	@echo "SOFTWARE." >> $@
 	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Created $@\"
 
+REF_CALENDAR_001_create.sql: .FORCE
+	@echo "-- REF_CALENDAR_001_create.sql" > $@
+	@echo "----------------------------------------------------------" >> $@
+	@echo "CREATE TABLE IF NOT EXISTS REF_CALENDAR_001 (" >> $@
+	@echo "date TEXT UNIQUE NOT NULL," >> $@
+	@echo "date_int INTEGER NOT NULL," >> $@
+	@echo "date_julian_day_number REAL NOT NULL," >> $@
+	@echo "date_end_of_year TEXT NOT NULL," >> $@
+	@echo "date_end_of_month TEXT NOT NULL," >> $@
+	@echo "date_end_of_week_smtwtfs TEXT NOT NULL," >> $@
+	@echo "days_in_period_month INTEGER NOT NULL," >> $@
+	@echo "days_in_period_week INTEGER NOT NULL," >> $@
+	@echo "year TEXT NOT NULL," >> $@
+	@echo "year_month TEXT NOT NULL," >> $@
+	@echo "year_week_of_year TEXT NOT NULL" >> $@
+	@echo ");" >> $@
+	@echo "CREATE UNIQUE INDEX IF NOT EXISTS idx_ref_calendar_001_date ON REF_CALENDAR_001 (date);" >> $@
+	@echo "CREATE UNIQUE INDEX IF NOT EXISTS idx_ref_calendar_001_date_int ON REF_CALENDAR_001 (date_int);" >> $@
+	@echo "INSERT OR IGNORE INTO REF_CALENDAR_001 (" >> $@
+	@echo "date," >> $@
+	@echo "date_int," >> $@
+	@echo "date_julian_day_number," >> $@
+	@echo "date_end_of_year," >> $@
+	@echo "date_end_of_month," >> $@
+	@echo "date_end_of_week_smtwtfs," >> $@
+	@echo "days_in_period_month," >> $@
+	@echo "days_in_period_week," >> $@
+	@echo "year," >> $@
+	@echo "year_month," >> $@
+	@echo "year_week_of_year)" >> $@
+	@echo "SELECT *" >> $@
+	@echo "FROM (" >> $@
+	@echo "WITH RECURSIVE dates(d) AS (" >> $@
+	@echo "VALUES('2020-01-01')" >> $@
+	@echo "UNION ALL" >> $@
+	@echo "SELECT date(d, '+1 day')" >> $@
+	@echo "FROM dates" >> $@
+	@echo "WHERE d < '2024-01-01')" >> $@
+	@echo "SELECT " >> $@  
+	@echo "d AS date, " >> $@
+	@echo "CAST(strftime('%Y%m%d', d) AS INT) AS date_int," >> $@
+	@echo "strftime('%J', d) AS date_julian_day_number, " >> $@
+	@echo "date(d, 'start of year','+1 year', '-1 day') AS date_end_of_year," >> $@
+	@echo "date(d, 'start of month','+1 month', '-1 day') AS date_end_of_month, " >> $@
+	@echo "date(d, 'weekday 0', '-1 days') AS date_end_of_week_smtwtfs," >> $@
+	@echo "JULIANDAY(date(d, 'start of month','+1 month')) - JULIANDAY(date(d, 'start of month')) AS days_in_period_month," >> $@
+	@echo "JULIANDAY(date(d, 'weekday 0')) - JULIANDAY(date(d, 'weekday 0', '-7 days')) AS days_in_period_week, " >> $@
+	@echo "strftime('%Y', d) AS year, " >> $@
+	@echo "strftime('%Y-%m', d) AS year_month, " >> $@
+	@echo "strftime('%Y-%W', d) AS year_week_of_year" >> $@
+	@echo "FROM dates);" >> $@
+	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Created $@\"
+
+er_relationships.txt: .FORCE
+	@echo "REF_CALENDAR_001 1--1 REF_CALENDAR_001" > $@
+	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Created $@\"
+
+
 ############################################################################
 # Configure standard load file targets                                     #
 # Create empty csv files for standard data structures                      #
@@ -435,8 +508,7 @@ metric_sample_001.csv:
 init-tables: metric-REF_CALENDAR_001 init-load-files
 
 create-database: 
-	$(SQLITEUTILS) create-database $(DATABASE) --enable-wal
-	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Created database in WAL mode - $(DATABASE)\"
+	$(create-database)
 
 # Create database reference tables 
 create-REF_CALENDAR_001: REF_CALENDAR_001_create.sql test-database
@@ -458,10 +530,6 @@ record_count-REF_CALENDAR_001.csv: TABLENAME=REF_CALENDAR_001
 record_count-REF_CALENDAR_001.csv: metric_sample_001.csv
 	$(metric-record_count)
 
-database_schema.png: DBFILEPATH=$(DATABASE)
-database_schema.png: REL_FILE=""
-database_schema.png: 
-	$(er-diagram)
 
 
 

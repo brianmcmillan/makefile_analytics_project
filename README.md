@@ -129,3 +129,19 @@ Open an issue in the GitHub repository.
  
 ### License
 [MIT](LICENSE.md)
+
+## Notes on specific files
+### er_relationships.txt
+This file is used to define the relationships between the tables in the database.  
+The basic structure id `<table_name><relationship><table_name>`  
+The types of relationships are defined using the following patterns:  
+
+```
+<table 1> 1--1 <table 2>
+1 - Exactly one
+? - 0 or 1
+* - 0 or more
++ - 1 or more
+```
+
+
