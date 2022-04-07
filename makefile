@@ -61,7 +61,8 @@ define directory-listing
 endef
 
 define makefile-graph
-	@$(NODEGRAPH) --direction LR | $(GRAPHVIZDOT) -Tpng > $@
+	@$(NODEGRAPH) --direction LR | $(GRAPHVIZDOT) -Tpng > $(basename $@).png
+	@$(NODEGRAPH) --direction LR | $(GRAPHVIZDOT) -Tplain > $(basename $@).txt
 	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Created makefile diagram at $@\"
 endef
 
@@ -112,6 +113,73 @@ define metric-record_count
 	@#record_count-<TABLE_NAME.CSV>(colon)(space)<path/to/metric_sample.csv>
 	@echo $(PROJECT-PATH)/$(firstword $(MAKEFILE_LIST)).$@,$(DATABASE).$(TABLENAME),"COUNT",record_count,$(shell date -u +"%Y-%m-%dT%H:%M:%SZ"),$(shell $(SQLITE3) $(DATABASE-PATH) "SELECT COUNT(*) FROM [$(TABLENAME)]" ".quit") >> $<
 endef	
+
+define update-homebrew
+	@#update-homebrew(colon)(space)
+	@$(BREW) update
+	@$(BREW) upgrade
+	@$(BREW) install $(HOMEBREW-PACKAGES)
+	@(echo "$(HOMEBREW-PACKAGES)" | sed -e 's/ /\n/g') > brew_packages_base.txt
+	$(BREW) list --versions > brew_packages_installed.txt
+	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Homebrew software updated\"
+endef
+
+define update-pip-packages
+	@#update-pip-packages(colon)(space)requirements_base.txt
+	@$(shell pyenv which pip) install --upgrade pip
+	@$(shell pyenv which pip) install -r $<
+	@$(shell pyenv which pip) freeze > requirements.txt
+	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Python pip packages upgraded - requirements.txt\"
+endef
+
+define update-macos
+	@#update-macos(colon)(space)
+	@softwareupdate --all --install --force
+	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"macOS software updated\"
+endef
+
+define install-pip-packages
+	@#install-pip-packages(colon)(space)requirements_base.txt install-python-local-virtualenv
+	@$(shell pyenv which pip) install --upgrade pip
+	@$(shell pyenv which pip) install -r $<
+	@$(shell pyenv which pip) freeze > requirements.txt
+	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Python pip packages installed - requirements.txt\"
+endef
+
+define freeze-pip
+	@#requirements.txt(colon)(space)requirements_base.txt
+	@$(shell pyenv which pip) freeze > $@
+	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Python pip packages installed - requirements.txt\"
+endef
+
+define install-python-local-virtualenv
+	@#install-python-local-virtualenv(colon)(space)
+	@pyenv virtualenv $(PYTHON-VERSION) $(PROJECT-NAME) || true
+	@pyenv local $(PROJECT-NAME)
+	@cd ..
+	@cd $(PROJECT-PATH)
+	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Python location - $(shell pyenv which python)\" 
+	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"PIP location - $(shell pyenv which pip)\"
+endef
+
+define list-brew-packages
+	@#brew_packages_installed.txt(colon)(space)brew_packages_base.txt .FORCE
+	@$(BREW) list --versions > $@
+	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Created $@\"
+endef
+
+define base-brew-package-list
+	@#brew_packages_base.txt(colon)(space).FORCE
+	@(echo "$(HOMEBREW-PACKAGES)" | sed -e 's/ /\n/g') > $@
+	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Created $@\" 
+endef	
+
+define uninstall-virtualenv
+	@#uninstall-virtualenv(colon)(space)
+	@pyenv virtualenv-delete $(PROJECT-NAME) || true
+	@rm -f .python-version
+	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Virtual environment removed - $(PROJECT-NAME)\"
+endef
 
 ############################################################################
 # Variables                                                                #
@@ -182,9 +250,23 @@ list-variables:
 ############################################################################
 installcheck: test-gitignore test-directory_listing.txt test-README-TEMPLATE.md test-README.md test-LICENSE.md ## Run the pre-installation test suite.
 
-check: installcheck test-brew_packages_base.txt test-brew_packages_installed.txt test-requirements.txt test-makefile_graph.png ## Executes all test suites.
+check: installcheck check-base-software check-database check-load-files check-documentation ## Executes all test suites.
+
+check-base-software: test-brew_packages_base.txt test-brew_packages_installed.txt \
+test-requirements.txt test-requirements_base.txt test-gitignore test-python-version
+
+check-documentation: test-makefile_graph.png test-directory_listing.txt
+
+check-database: test-database test-database_schema.png test-database_schema.er \
+test-REF_CALENDAR_001
+
+check-load-files: test-metric_sample_001.csv
+
 
 test-gitignore: .gitignore
+	$(test-dependent-file)
+
+test-python-version: .python-version
 	$(test-dependent-file)
 
 test-README.md: README.md
@@ -208,13 +290,16 @@ test-brew_packages_installed.txt: brew_packages_installed.txt
 test-requirements.txt: requirements.txt
 	$(test-dependent-file)
 
+test-requirements_base.txt: requirements_base.txt
+	$(test-dependent-file)
+
 test-makefile_graph.png: makefile_graph.png
 	$(test-dependent-file)
 
 test-database_schema.png: database_schema.png
 	$(test-dependent-file)
 
-test-database_schema.png: database_schema.er
+test-database_schema.er: database_schema.er
 	$(test-dependent-file)
 
 #------------------------------------------------
@@ -237,20 +322,13 @@ test-metric_sample_001.csv: metric_sample_001.csv
 install: install-pip-packages .gitignore git-init check ## Run once when setting up a new project.
 
 brew_packages_base.txt: .FORCE
-	@(echo "$(HOMEBREW-PACKAGES)" | sed -e 's/ /\n/g') > $@
-	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Created $@\" 
+	$(base-brew-package-list)
 
 brew_packages_installed.txt: brew_packages_base.txt .FORCE
-	$(BREW) list --versions > $@
-	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Created $@\"
+	$(list-brew-packages)
 
 install-python-local-virtualenv: 
-	@pyenv virtualenv $(PYTHON-VERSION) $(PROJECT-NAME) || true
-	@pyenv local $(PROJECT-NAME)
-	@cd ..
-	@cd $(PROJECT-PATH)
-	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Python location - $(shell pyenv which python)\" 
-	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"PIP location - $(shell pyenv which pip)\"
+	$(install-python-local-virtualenv)
 
 # Python pip packages
 # To upgrade - Edit requirements_base.txt with the new projects and/or versions
@@ -263,15 +341,10 @@ requirements_base.txt: .FORCE
 	@echo SQLAlchemy==1.3.24 >> $@
 
 requirements.txt: requirements_base.txt
-	@$(shell pyenv which pip) freeze > $@
-	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Python pip packages installed - requirements.txt\"
+	$(freeze-pip)
 
 install-pip-packages: requirements_base.txt install-python-local-virtualenv
-	@$(shell pyenv which pip) install --upgrade pip
-	@$(shell pyenv which pip) install -r $<
-	@$(shell pyenv which pip) freeze > requirements.txt
-	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Python pip packages installed - requirements.txt\"
-
+	$(install-pip-packages)
 
 ############################################################################
 # Utility tasks to update shell profiles on macOS.
@@ -303,45 +376,37 @@ git-init:
 update: update-homebrew update-pip-packages check ## Updates base software (OS, Homebrew, python, pip)
 
 update-macos: 
-	@softwareupdate --all --install --force
-	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"macOS software updated\" 
+	$(update-macos)
 
 update-homebrew: 
-	@$(BREW) update
-	@$(BREW) upgrade
-	@$(BREW) install $(HOMEBREW-PACKAGES)
-	@(echo "$(HOMEBREW-PACKAGES)" | sed -e 's/ /\n/g') > brew_packages_base.txt
-	$(BREW) list --versions > brew_packages_installed.txt
-	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Homebrew software updated\" 
+	$(update-homebrew)
 
 update-pip-packages: requirements_base.txt
-	@$(shell pyenv which pip) install --upgrade pip
-	@$(shell pyenv which pip) install -r $<
-	@$(shell pyenv which pip) freeze > requirements.txt
-	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Python pip packages upgraded - requirements.txt\"
-
+	$(update-pip-packages)
 
 ############################################################################
 # Uninstall                                                                #
 ############################################################################
-uninstall: uninstall-files uninstall-virtualenv ## Uninstalls the project files.
+uninstall: uninstall-files uninstall-database ## Uninstalls the project files.
+
+uninstall-all: uninstall uninstall-virtualenv
 
 uninstall-files: FILES=.gitignore README-TEMPLATE.md LICENSE.md brew_packages_*.txt directory_listing.txt \
-makefile_graph.png requirements_base.txt requirements.txt brew_packages_* .python-version *.db *.db-* \
-metric_sample_001.csv database_schema.* er_relationships.txt REF_CALENDAR_001.sql
+makefile_graph.png requirements_base.txt requirements.txt brew_packages_* metric_sample_001.csv
 uninstall-files: 
 	$(uninstall-file-list)
 
-uninstall-virtualenv:	
-	@pyenv virtualenv-delete $(PROJECT-NAME) || true
-	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Virtual environment removed - $(PROJECT-NAME)\"
+uninstall-database: FILES=*.db *.db-* database_schema.* er_relationships.txt *.er REF_CALENDAR_001_create.sql
+uninstall-database: 
+	$(uninstall-file-list)
+
+uninstall-virtualenv: 
+	$(uninstall-virtualenv)
 
 # WARNING: Uninstalling Homebrew *WILL* affect outher applications
 # uninstall-homebrew: .FORCE
 # 	@/bin/bash -c "$$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/uninstall.sh)"
 # 	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Homebrew uninstalled\"
-
-
 
 ############################################################################
 # Document Templates                                                       #
@@ -487,25 +552,15 @@ er_relationships.txt: .FORCE
 	@echo "REF_CALENDAR_001 1--1 REF_CALENDAR_001" > $@
 	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Created $@\"
 
-
-############################################################################
-# Configure standard load file targets                                     #
-# Create empty csv files for standard data structures                      #
-############################################################################
-init-load-files: test-metric_sample_001.csv
-
 metric_sample_001.csv: 
 	@echo provider_code,node_code,node_qualifier,metric_code,value_dts,metric_value > $@
-	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Created $@\"
-
-
-
+	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Created $@\"	
 
 ############################################################################
 # Configure Database                                                       #
 ############################################################################
 # Create the default project database 
-init-tables: metric-REF_CALENDAR_001 init-load-files
+init-tables: metric-REF_CALENDAR_001 check-database
 
 create-database: 
 	$(create-database)
@@ -517,7 +572,6 @@ create-REF_CALENDAR_001: REF_CALENDAR_001_create.sql test-database
 metric-REF_CALENDAR_001: TABLENAME=REF_CALENDAR_001
 metric-REF_CALENDAR_001: test-REF_CALENDAR_001
 	$(record-count-table)
-
 
 ############################################################################
 # Collect Metrics                                                          #
@@ -534,22 +588,22 @@ record_count-REF_CALENDAR_001.csv: metric_sample_001.csv
 
 
 
-field_count_check-metric_sample_001.csv: EXPECTED=6
-field_count_check-metric_sample_001.csv: metric_sample_001.csv
-	@[[ $$(datamash -t, check $(EXPECTED) fields < $<) ]] \
-	&& true \
-	|| echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [FAIL]    $@    \"Expected fields not equal to $(EXPECTED)\"
+# field_count_check-metric_sample_001.csv: EXPECTED=6
+# field_count_check-metric_sample_001.csv: metric_sample_001.csv
+# 	@[[ $$(datamash -t, check $(EXPECTED) fields < $<) ]] \
+# 	&& true \
+# 	|| echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [FAIL]    $@    \"Expected fields not equal to $(EXPECTED)\"
 
-number_check-metric_sample_001.csv: COLUMN=6
-number_check-metric_sample_001.csv: metric_sample_001.csv
-	@[[ $$(datamash -t, --header-in sum $(COLUMN) < metric_sample_001.csv) ]] \
-	&& true \
-	|| echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [FAIL]    $@    \"Expected numeric data in column $(COLUMN)\"
+# number_check-metric_sample_001.csv: COLUMN=6
+# number_check-metric_sample_001.csv: metric_sample_001.csv
+# 	@[[ $$(datamash -t, --header-in sum $(COLUMN) < metric_sample_001.csv) ]] \
+# 	&& true \
+# 	|| echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [FAIL]    $@    \"Expected numeric data in column $(COLUMN)\"
 
-regex_check-metric_sample_001.csv-C3: COLUMN=3
-regex_check-metric_sample_001.csv-C3: REGEX=^[[:space:]\"a-zA-Z0-9\/,.:_-]+$$
-regex_check-metric_sample_001.csv-C3: metric_sample_001.csv
-	@[[ $$(datamash -t, --header-in unique $(COLUMN) < metric_sample_001.csv) =~ $(REGEX) ]] \
-	&& true \
-	|| echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [FAIL]    $@    \"Column $(COLUMN) - $(REGEX) not matched\"	
+# regex_check-metric_sample_001.csv-C3: COLUMN=3
+# regex_check-metric_sample_001.csv-C3: REGEX=^[[:space:]\"a-zA-Z0-9\/,.:_-]+$$
+# regex_check-metric_sample_001.csv-C3: metric_sample_001.csv
+# 	@[[ $$(datamash -t, --header-in unique $(COLUMN) < metric_sample_001.csv) =~ $(REGEX) ]] \
+# 	&& true \
+# 	|| echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [FAIL]    $@    \"Column $(COLUMN) - $(REGEX) not matched\"	
 
