@@ -255,7 +255,7 @@ check: installcheck check-base-software check-database check-load-files check-do
 check-base-software: test-brew_packages_base.txt test-brew_packages_installed.txt \
 test-requirements.txt test-requirements_base.txt test-gitignore test-python-version
 
-check-documentation: test-makefile_graph.png test-directory_listing.txt
+check-documentation: test-makefile_graph.png test-makefile_graph.txt test-directory_listing.txt
 
 check-database: test-database test-database_schema.png test-database_schema.er \
 test-REF_CALENDAR_001
