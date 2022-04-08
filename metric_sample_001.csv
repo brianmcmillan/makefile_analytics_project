@@ -1,1 +1,6 @@
 provider_code,node_code,node_qualifier,metric_code,value_dts,metric_value
+/Users/brianmcmillan/Documents/GitHub/makefile_analytics_project/makefile.record_count-REF_CALENDAR_001.csv,makefile_analytics_project.db.REF_CALENDAR_001,COUNT,record_count,2022-04-08T15:45:21Z,1462
+/Users/brianmcmillan/Documents/GitHub/makefile_analytics_project/makefile.record_count-REF_CALENDAR_001.csv,makefile_analytics_project.db.REF_CALENDAR_001,COUNT,record_count,2022-04-08T15:45:23Z,1462
+/Users/brianmcmillan/Documents/GitHub/makefile_analytics_project/makefile.record_count-REF_CALENDAR_001.csv,makefile_analytics_project.db.REF_CALENDAR_001,COUNT,record_count,2022-04-08T15:45:24Z,1462
+/Users/brianmcmillan/Documents/GitHub/makefile_analytics_project/makefile.record_count-REF_CALENDAR_001.csv,makefile_analytics_project.db.REF_CALENDAR_001,COUNT,record_count,2022-04-08T15:45:25Z,1462
+/Users/brianmcmillan/Documents/GitHub/makefile_analytics_project/makefile.record_count-REF_CALENDAR_001.csv,makefile_analytics_project.db.REF_CALENDAR_001,COUNT,record_count,2022-04-08T15:45:25Z,1462

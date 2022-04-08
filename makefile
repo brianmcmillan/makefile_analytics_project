@@ -181,6 +181,40 @@ define uninstall-virtualenv
 	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Virtual environment removed - $(PROJECT-NAME)\"
 endef
 
+define metadata-tables
+	@#META_TABLES_001(colon)(space)
+	@$(SQLITE3) $(DATABASE-PATH) "DROP TABLE IF EXISTS '_analyze_tables_';" ".quit"
+	@$(SQLITE3) $(DATABASE-PATH) "DROP TABLE IF EXISTS 'META_TABLES_001';" ".quit"
+	@$(SQLITEUTILS) analyze-tables $(DATABASE-PATH) --save
+	@$(SQLITE3) $(DATABASE-PATH) "ALTER TABLE '_analyze_tables_' RENAME TO 'META_TABLES_001';" ".quit"
+	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"$(shell $(SQLITE3) $(DATABASE-PATH) "SELECT COUNT(*) || ' records in $(DATABASE).META_TABLES_001' FROM META_TABLES_001" ".quit")\"
+endef
+
+define csv_field_count_check
+	@#field_count_check-<file_name.csv>(colon)(space)EXPECTED=<number_of_columns>
+	@#field_count_check-<file_name.csv>(colon)(space)<path/to/file.csv>
+	@[[ $$(datamash -t, check $(EXPECTED) fields < $<) ]] \
+	&& true \
+	|| echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [FAIL]    $@    \"Expected fields not equal to $(EXPECTED)\"
+endef
+
+define csv_number_check
+	@#number_check-<file_name.csv>(colon)(space)COLUMN=<column_number>
+	@#number_check-<file_name.csv>(colon)(space)<path/to/file.csv>
+	@[[ $$(datamash -t, --header-in sum $(COLUMN) < metric_sample_001.csv) ]] \
+	&& true \
+	|| echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [FAIL]    $@    \"Expected numeric data in column $(COLUMN)\"
+endef
+
+define csv_regex_check
+	@#regex_check-<file_name.csv>(colon)(space)COLUMN=<column_number>
+	@#regex_check-<file_name.csv>(colon)(space)REGEX=<^[[:space:]\"a-zA-Z0-9\/,.:_-]+$$>
+	@#regex_check-<file_name.csv>(colon)(space)<path/to/file.csv>
+	@[[ $$(datamash -t, --header-in unique $(COLUMN) < metric_sample_001.csv) =~ $(REGEX) ]] \
+	&& true \
+	|| echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [FAIL]    $@    \"Column $(COLUMN) - $(REGEX) not matched\"
+endef
+
 ############################################################################
 # Variables                                                                #
 ############################################################################
@@ -579,11 +613,7 @@ metric-REF_CALENDAR_001: test-REF_CALENDAR_001
 	$(record-count-table)
 
 META_TABLES_001:
-	@$(SQLITE3) $(DATABASE-PATH) "DROP TABLE IF EXISTS '_analyze_tables_';" ".quit"
-	@$(SQLITE3) $(DATABASE-PATH) "DROP TABLE IF EXISTS 'META_TABLES_001';" ".quit"
-	@$(SQLITEUTILS) analyze-tables $(DATABASE-PATH) --save
-	@$(SQLITE3) $(DATABASE-PATH) "ALTER TABLE '_analyze_tables_' RENAME TO 'META_TABLES_001';" ".quit"
-	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"$(shell $(SQLITE3) $(DATABASE-PATH) "SELECT COUNT(*) || ' records in $(DATABASE).META_TABLES_001' FROM META_TABLES_001" ".quit")\"
+	$(metadata-tables)
 
 ############################################################################
 # Collect Metrics                                                          #
@@ -600,22 +630,16 @@ record_count-REF_CALENDAR_001.csv: metric_sample_001.csv
 
 
 
-# field_count_check-metric_sample_001.csv: EXPECTED=6
-# field_count_check-metric_sample_001.csv: metric_sample_001.csv
-# 	@[[ $$(datamash -t, check $(EXPECTED) fields < $<) ]] \
-# 	&& true \
-# 	|| echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [FAIL]    $@    \"Expected fields not equal to $(EXPECTED)\"
+field_count_check-metric_sample_001.csv: EXPECTED=6
+field_count_check-metric_sample_001.csv: metric_sample_001.csv
+	$(csv_field_count_check)
 
-# number_check-metric_sample_001.csv: COLUMN=6
-# number_check-metric_sample_001.csv: metric_sample_001.csv
-# 	@[[ $$(datamash -t, --header-in sum $(COLUMN) < metric_sample_001.csv) ]] \
-# 	&& true \
-# 	|| echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [FAIL]    $@    \"Expected numeric data in column $(COLUMN)\"
+number_check-metric_sample_001.csv: COLUMN=6
+number_check-metric_sample_001.csv: metric_sample_001.csv
+	$(csv_number_check)
 
-# regex_check-metric_sample_001.csv-C3: COLUMN=3
-# regex_check-metric_sample_001.csv-C3: REGEX=^[[:space:]\"a-zA-Z0-9\/,.:_-]+$$
-# regex_check-metric_sample_001.csv-C3: metric_sample_001.csv
-# 	@[[ $$(datamash -t, --header-in unique $(COLUMN) < metric_sample_001.csv) =~ $(REGEX) ]] \
-# 	&& true \
-# 	|| echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [FAIL]    $@    \"Column $(COLUMN) - $(REGEX) not matched\"	
+regex_check-metric_sample_001.csv-C3: COLUMN=3
+regex_check-metric_sample_001.csv-C3: REGEX=^[[:space:]\"a-zA-Z0-9\/,.:_-]+$$
+regex_check-metric_sample_001.csv-C3: metric_sample_001.csv
+	$(csv_regex_check)
 
