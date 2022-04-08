@@ -215,6 +215,20 @@ define csv_regex_check
 	|| echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [FAIL]    $@    \"Column $(COLUMN) - $(REGEX) not matched\"
 endef
 
+define compact-database
+	@#compact-database(colon)(space)<path/to/database.db>
+	@$(SQLITE3) $< "PRAGMA optimize;" && echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Optimized $<\"
+	@$(SQLITE3) $< "PRAGMA auto_vacuum = FULL;" && $(SQLITE3) $< "VACUUM;" && echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Vacuumed $<\"
+	@$(SQLITE3) $< "PRAGMA integrity_check;" && echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Performed integrity check on $<\"
+endef
+
+define backup-database
+	@#backup-database(colon)(space)BACKUPFILEPATH=<path/to/database.bak>
+	@#backup-database(colon)(space)<path/to/database.db>
+	@$(SQLITE3) $< ".backup $(BACKUPFILEPATH)"
+	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Backed up $< into $(BACKUPFILEPATH)\"
+endef
+
 ############################################################################
 # Variables                                                                #
 ############################################################################
@@ -226,6 +240,13 @@ PROJECT-NAME := $(notdir $(shell pwd))
 PROJECT-CONTACT := "brian mcmillan - brian[at]minimumviablearchitecture[dot]com"
 DATABASE := $(PROJECT-NAME).db
 DATABASE-PATH :=$(PROJECT-PATH)/$(PROJECT-NAME).db
+
+# Project variables
+BUSINESS-CONTACT-NAME := Brian McMillan
+BUSINESS-CONTACT-EMAIL := brian@minimumviablearchitecture.com
+TECHNICAL-CONTACT-NAME := Some Person
+TECHNICAL-CONTACT-EMAIL := me@example.com
+
 
 # Deployment variables
 LOCAL_ADDRESS := $(shell ipconfig getifaddr en0) #192.168.1.251
@@ -363,6 +384,9 @@ test-META_TABLES_001: META_TABLES_001
 test-metric_sample_001.csv: metric_sample_001.csv
 	$(test-dependent-file)
 
+test-metadata.yaml: metadata.yaml
+	$(test-dependent-file)	
+
 ############################################################################
 # Installation - Base Software                                             #
 ############################################################################
@@ -421,6 +445,10 @@ git-init:
 # git config --global color.ui auto
 ############################################################################
 
+compact-database: $(DATABASE-PATH) ## Database maintenance scripts.
+	@$(compact-database)
+
+
 ############################################################################
 # Update                                                                   #
 ############################################################################
@@ -443,7 +471,7 @@ uninstall: uninstall-files uninstall-database ## Uninstalls the project files.
 uninstall-all: uninstall uninstall-virtualenv
 
 uninstall-files: FILES=.gitignore README-TEMPLATE.md LICENSE.md brew_packages_*.txt directory_listing.txt \
-makefile_graph.png requirements_base.txt requirements.txt brew_packages_* metric_sample_001.csv
+makefile_graph.png requirements_base.txt requirements.txt brew_packages_* metric_sample_001.csv test-metadata.yaml
 uninstall-files: 
 	$(uninstall-file-list)
 
@@ -607,6 +635,68 @@ metric_sample_001.csv:
 	@echo provider_code,node_code,node_qualifier,metric_code,value_dts,metric_value > $@
 	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Created $@\"	
 
+metadata.yaml: 
+	@echo "title: $(PROJECT-NAME)" > $@
+	@echo "about: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor." >> $@
+	@echo "about_url: https://example.com/" >> $@
+	@echo "source: Building Data Products" >> $@
+	@echo "source_url: https://example.com/" >> $@
+	@echo "description_html: |-" >> $@
+	@echo "  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.<br>" >> $@
+	@echo "  Lorem ipsum dolor sit amet, consectetur adipiscing elit." >> $@
+	@echo "  <p></p>" >> $@
+	@echo "  <strong>Contacts:</strong><br>" >> $@
+	@echo "  Business Contact: <a href = mailto: "brian@minimumviablearchitecture.com">Brian McMillan</a><br>" >> $@
+	@echo "  Technical Contact: <a href = mailto: "me@example.com">Some Person</a>" >> $@
+	@echo "license: DbCL" >> $@
+	@echo "license_url: https://opendatacommons.org/licenses/dbcl/1-0/" >> $@
+	@echo "databases:" >> $@
+	@echo "  makefile_analytics_project:" >> $@
+	@echo "    tables:" >> $@
+	@echo "      REF_CALENDAR_001:" >> $@
+	@echo "        description: Basic date dimension table. JOIN on either the date or date_int columns." >> $@
+	@echo "        source: REF_CALENDAR_001_create.sql" >> $@
+	@echo "        about: Standard reference table with dates between 2020-01-01 and 2024-01-01" >> $@
+	@echo "        sort: date_int" >> $@
+	@echo "        columns: " >> $@
+	@echo "            date: Date in YYYY-MM-DD format." >> $@
+	@echo "            date_int: Date in YYYYMMDD format." >> $@
+	@echo "            date_julian_day: Numeric date value used to compute the differences between dates." >> $@
+	@echo "            date_end_of_year: Date at the end of the year." >> $@
+	@echo "            date_end_of_week_smtwtfs: Date at the end of the week. Assumes the week starts on a Sunday and ends on a Saturday." >> $@
+	@echo "            days_in_period_month: Number of days in this month." >> $@
+	@echo "            days_in_period_week: Number of days in this week." >> $@
+	@echo "            year: Year in YYYY format." >> $@
+	@echo "            year_month: Month in YYYY-MM format." >> $@
+	@echo "            year_week_of_year: Week of the year in YYYY-WW format." >> $@
+	@echo "      META_TABLES_001:" >> $@
+	@echo "        description: Data catalog table." >> $@
+	@echo "        source: META_TABLES_001_create" >> $@
+	@echo "        about: Standard reference table with metadata for each table in the database." >> $@
+	@echo "        columns: " >> $@
+	@echo "            table: The name of the table." >> $@
+	@echo "            column: The name of the column." >> $@
+	@echo "            total_rows: Total number of rows in the table." >> $@
+	@echo "            num_null: Count of NULL records in the column." >> $@
+	@echo "            num_blank: Count of empty records in the column." >> $@
+	@echo "            num_distinct: Count of distinct records in the column." >> $@
+	@echo "            most_common: JSON array of the most common values in the column." >> $@
+	@echo "            least_common: JSON array of the least common values in the column." >> $@
+	@echo "    queries:" >> $@
+	@echo "        end_of_period_lookup:" >> $@
+	@echo "          title: End of period date look-up" >> $@
+	@echo "          description: Look-up query to assist in aggregating data by the end of year, month, or week date." >> $@
+	@echo "          sql:  |-" >> $@
+	@echo "            SELECT" >> $@
+	@echo "              date," >> $@
+	@echo "              date_end_of_week_smtwtfs AS date_end_of_week," >> $@
+	@echo "              date_end_of_month," >> $@
+	@echo "              date_end_of_year" >> $@
+	@echo "            FROM" >> $@
+	@echo "              REF_CALENDAR_001" >> $@
+	@echo "            ORDER BY" >> $@
+	@echo "              date_int ASC" >> $@
+
 ############################################################################
 # Configure Database                                                       #
 ############################################################################
@@ -624,7 +714,7 @@ metric-REF_CALENDAR_001: TABLENAME=REF_CALENDAR_001
 metric-REF_CALENDAR_001: test-REF_CALENDAR_001
 	$(record-count-table)
 
-META_TABLES_001:
+META_TABLES_001: .FORCE
 	$(metadata-tables)
 
 ############################################################################
@@ -667,8 +757,8 @@ regex_check-metric_sample_001.csv-C3: metric_sample_001.csv
 # 	@cp -f etc/server/settings.txt opt/local/settings.txt
 # 	@cp -f $< opt/local/$(<F)
 
-deploy-local: 
+deploy-local: test-metadata.yaml test-database
 	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Starting server on http://$(strip $(LOCAL_ADDRESS)):$(LOCAL_PORT)\"
-	@$(DATASETTE) $(DATABASE-PATH) --host $(LOCAL_ADDRESS) --port $(LOCAL_PORT) -o
+	$(DATASETTE) $(DATABASE-PATH) --host $(LOCAL_ADDRESS) --port $(LOCAL_PORT) --metadata metadata.yaml -o
 #	@$(DATASETTE) serve opt/local/ --host $(LOCAL_ADDRESS) --port $(LOCAL_PORT) -o
 	

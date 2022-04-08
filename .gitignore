@@ -1,3 +1,5 @@
 .DS_Store
 .DS_Store?
 *.DS_Store
+makefile_analytics_project.db-wal
+makefile_analytics_project.db-shm
