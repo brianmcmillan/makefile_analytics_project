@@ -3,3 +3,4 @@
 *.DS_Store
 makefile_analytics_project.db-wal
 makefile_analytics_project.db-shm
+makefile_analytics_project.db.bak

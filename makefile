@@ -448,6 +448,12 @@ git-init:
 compact-database: $(DATABASE-PATH) ## Database maintenance scripts.
 	@$(compact-database)
 
+backup-database: BACKUPFILEPATH=$(DATABASE-PATH).bak
+backup-database: $(DATABASE-PATH)
+	@$(backup-database)
+
+
+
 
 ############################################################################
 # Update                                                                   #
