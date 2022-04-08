@@ -227,6 +227,10 @@ PROJECT-CONTACT := "brian mcmillan - brian[at]minimumviablearchitecture[dot]com"
 DATABASE := $(PROJECT-NAME).db
 DATABASE-PATH :=$(PROJECT-PATH)/$(PROJECT-NAME).db
 
+# Deployment variables
+LOCAL_ADDRESS := $(shell ipconfig getifaddr en0) #192.168.1.251
+LOCAL_PORT := 8001
+
 # Program locations (which <utility>)
 SHELL := /bin/bash
 BREW := /usr/local/bin/brew
@@ -240,6 +244,7 @@ NODEGRAPH := $(PYENVDIR)/makefile2dot
 SQLITEUTILS := $(PYENVDIR)/sqlite-utils
 NODEGRAPH := $(PYENVDIR)/makefile2dot
 ERALCHEMY := $(PYENVDIR)/eralchemy
+DATASETTE := $(PYENVDIR)/datasette
 
 #######################################
 all: installcheck initial-documentation ## Executes the default make task.
@@ -330,6 +335,9 @@ test-requirements_base.txt: requirements_base.txt
 test-makefile_graph.png: makefile_graph.png
 	$(test-dependent-file)
 
+test-makefile_graph.txt: makefile_graph.txt
+	$(test-dependent-file)
+
 test-database_schema.png: database_schema.png
 	$(test-dependent-file)
 
@@ -378,6 +386,10 @@ requirements_base.txt: .FORCE
 	@echo sqlite-utils==3.22.1 >> $@
 	@echo ERAlchemy==1.2.10 >> $@
 	@echo SQLAlchemy==1.3.24 >> $@
+	@echo datasette==0.61.1 >> $@
+	@echo datasette-copyable==0.3.1 >> $@
+	@echo datasette-vega==0.6.2 >> $@
+	@echo datasette-yaml==0.1.1 >> $@
 
 requirements.txt: requirements_base.txt
 	$(freeze-pip)
@@ -643,3 +655,20 @@ regex_check-metric_sample_001.csv-C3: REGEX=^[[:space:]\"a-zA-Z0-9\/,.:_-]+$$
 regex_check-metric_sample_001.csv-C3: metric_sample_001.csv
 	$(csv_regex_check)
 
+############################################################################
+# Deployment                                                               #
+############################################################################
+
+# build/local: svc/db/online_retail.db
+# 	@echo $(DTS)     [INFO] - Executing $@
+# 	@mkdir -p opt/$(notdir $@)/static
+# 	@cp -f etc/app/metadata.yaml opt/local/metadata.yaml
+# 	@cp -f etc/server/requirements.txt opt/local/requirements.txt
+# 	@cp -f etc/server/settings.txt opt/local/settings.txt
+# 	@cp -f $< opt/local/$(<F)
+
+deploy-local: 
+	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Starting server on http://$(strip $(LOCAL_ADDRESS)):$(LOCAL_PORT)\"
+	@$(DATASETTE) $(DATABASE-PATH) --host $(LOCAL_ADDRESS) --port $(LOCAL_PORT) -o
+#	@$(DATASETTE) serve opt/local/ --host $(LOCAL_ADDRESS) --port $(LOCAL_PORT) -o
+	

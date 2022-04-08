@@ -1,151 +1,164 @@
-graph 1 19.726 15.139
-node "brew_packages_installed.txt" 12.865 6.3611 2.3611 0.5 "brew_packages_installed.txt" solid rectangle black lightgrey
-node "brew_packages_base.txt" 16.4 7 2.0694 0.5 "brew_packages_base.txt" solid rectangle black lightgrey
-node ".FORCE" 19.032 10.569 0.88889 0.5 ".FORCE" solid rectangle black lightgrey
-node "test-REF_CALENDAR_001_create.sql" 12.865 12.917 3.1944 0.5 "test-REF_CALENDAR_001_create.sql" solid rectangle black lightgrey
-node "REF_CALENDAR_001_create.sql" 16.4 13.556 2.875 0.5 "REF_CALENDAR_001_create.sql" solid rectangle black lightgrey
-node "record_count-REF_CALENDAR_001.csv" 9.0596 0.25 3.4167 0.5 "record_count-REF_CALENDAR_001.csv" solid rectangle black lightgrey
-node "metric_sample_001.csv" 12.865 0.625 2.0278 0.5 "metric_sample_001.csv" solid rectangle black lightgrey
-node "uninstall-all" 0.73119 14.139 1.4624 0.5 "uninstall-all" solid ellipse black lightgrey
-node uninstall 2.8513 14.514 0.875 0.5 uninstall solid rectangle black lightgrey
-node "uninstall-virtualenv" 2.8513 13.764 1.6944 0.5 "uninstall-virtualenv" solid rectangle black lightgrey
-node all 2.8513 8.2083 0.75 0.5 all solid ellipse black lightgrey
-node installcheck 5.5457 8.2083 1.125 0.5 installcheck solid rectangle black lightgrey
-node "initial-documentation" 5.5457 9.6389 1.8611 0.5 "initial-documentation" solid rectangle black lightgrey
-node "README-TEMPLATE.md" 12.865 8.3889 2.3611 0.5 "README-TEMPLATE.md" solid rectangle black lightgrey
-node "LICENSE.md" 16.4 8.6944 1.3056 0.5 "LICENSE.md" solid rectangle black lightgrey
-node "check-base-software" 5.5457 4.8333 1.7778 0.5 "check-base-software" solid rectangle black lightgrey
-node "test-brew_packages_base.txt" 9.0596 6.3333 2.3889 0.5 "test-brew_packages_base.txt" solid rectangle black lightgrey
-node "test-brew_packages_installed.txt" 9.0596 5.5833 2.6944 0.5 "test-brew_packages_installed.txt" solid rectangle black lightgrey
-node "test-requirements.txt" 9.0596 2.2778 1.7917 0.5 "test-requirements.txt" solid rectangle black lightgrey
-node "test-requirements_base.txt" 12.865 4.5278 2.2222 0.5 "test-requirements_base.txt" solid rectangle black lightgrey
-node "test-gitignore" 9.0596 4.8333 1.2361 0.5 "test-gitignore" solid rectangle black lightgrey
-node "test-python-version" 9.0596 3.5556 1.6944 0.5 "test-python-version" solid rectangle black lightgrey
-node ".gitignore" 12.865 3.0278 0.95833 0.5 ".gitignore" solid rectangle black lightgrey
-node "init-tables" 2.8513 12.819 1.2818 0.5 "init-tables" solid ellipse black lightgrey
-node "metric-REF_CALENDAR_001" 5.5457 13.389 2.6111 0.5 "metric-REF_CALENDAR_001" solid rectangle black lightgrey
-node "check-database" 5.5457 12.639 1.375 0.5 "check-database" solid rectangle black lightgrey
-node "uninstall-files" 5.5457 14.889 1.2639 0.5 "uninstall-files" solid rectangle black lightgrey
-node "uninstall-database" 5.5457 14.139 1.5833 0.5 "uninstall-database" solid rectangle black lightgrey
-node update 0.73119 7.1389 0.95686 0.5 update solid ellipse black lightgrey
-node "update-homebrew" 2.8513 8.9583 1.5972 0.5 "update-homebrew" solid rectangle black lightgrey
-node "update-pip-packages" 2.8513 7.1389 1.7778 0.5 "update-pip-packages" solid rectangle black lightgrey
-node check 2.8513 6.3889 0.75 0.5 check solid rectangle black lightgrey
-node "test-README.md" 9.0596 7.6111 1.6528 0.5 "test-README.md" solid rectangle black lightgrey
-node "README.md" 12.865 7.6389 1.3333 0.5 "README.md" solid rectangle black lightgrey
-node "er_relationships.txt" 16.4 11.528 1.6806 0.5 "er_relationships.txt" solid rectangle black lightgrey
-node "test-REF_CALENDAR_001" 9.0596 13.389 2.3889 0.5 "test-REF_CALENDAR_001" solid rectangle black lightgrey
-node "create-REF_CALENDAR_001" 12.865 13.667 2.5694 0.5 "create-REF_CALENDAR_001" solid rectangle black lightgrey
-node "requirements_base.txt" 16.4 4.5278 1.9028 0.5 "requirements_base.txt" solid rectangle black lightgrey
-node "check-documentation" 5.5457 10.389 1.8611 0.5 "check-documentation" solid rectangle black lightgrey
-node "test-makefile_graph.png" 9.0596 11.139 2.0694 0.5 "test-makefile_graph.png" solid rectangle black lightgrey
-node "test-directory_listing.txt" 9.0596 10.389 2.0417 0.5 "test-directory_listing.txt" solid rectangle black lightgrey
-node "test-database" 16.4 14.306 1.1944 0.5 "test-database" solid rectangle black lightgrey
-node "test-database_schema.png" 9.0596 11.889 2.1944 0.5 "test-database_schema.png" solid rectangle black lightgrey
-node "test-database_schema.er" 9.0596 12.639 2.0694 0.5 "test-database_schema.er" solid rectangle black lightgrey
-node help 9.0596 9.6389 0.75 0.5 help solid rectangle black lightgrey
-node "test-README-TEMPLATE.md" 9.0596 8.3611 2.6944 0.5 "test-README-TEMPLATE.md" solid rectangle black lightgrey
-node "requirements.txt" 12.865 2.2778 1.4722 0.5 "requirements.txt" solid rectangle black lightgrey
-node "install-pip-packages" 2.8513 1.5278 1.7361 0.5 "install-pip-packages" solid rectangle black lightgrey
-node "install-python-local-virtualenv" 5.5457 1 2.5278 0.5 "install-python-local-virtualenv" solid rectangle black lightgrey
-node "database_schema.png" 12.865 11.417 1.875 0.5 "database_schema.png" solid rectangle black lightgrey
-node ".python-version" 12.865 3.7778 1.4167 0.5 ".python-version" solid rectangle black lightgrey
-node "makefile_graph.txt" 16.4 12.806 2.1665 0.5 "makefile_graph.txt" solid ellipse black lightgrey
-node "database_schema.er" 12.865 12.167 1.7361 0.5 "database_schema.er" solid rectangle black lightgrey
-node "test-metric_sample_001.csv" 9.0596 1 2.3611 0.5 "test-metric_sample_001.csv" solid rectangle black lightgrey
-node "check-load-files" 5.5457 3.8194 1.4444 0.5 "check-load-files" solid rectangle black lightgrey
-node "test-LICENSE.md" 12.865 9.1389 1.625 0.5 "test-LICENSE.md" solid rectangle black lightgrey
-node "calculate-metrics" 5.5457 0.25 1.9859 0.5 "calculate-metrics" solid ellipse black lightgrey
-node "directory_listing.txt" 16.4 9.5 1.7222 0.5 "directory_listing.txt" solid rectangle black lightgrey
-node "makefile_graph.png" 16.4 10.25 1.75 0.5 "makefile_graph.png" solid rectangle black lightgrey
-node "create-database" 19.032 14.306 1.3889 0.5 "create-database" solid rectangle black lightgrey
-node documentation 5.5457 11.514 1.7693 0.5 documentation solid ellipse black lightgrey
-node install 0.73119 2.5972 0.9027 0.5 install solid ellipse black lightgrey
-node "git-init" 2.8513 2.2778 0.75 0.5 "git-init" solid rectangle black lightgrey
-edge "brew_packages_installed.txt" "brew_packages_base.txt" 4 14.047 6.5739 14.427 6.643 14.848 6.7198 15.227 6.7888 solid black
-edge "brew_packages_installed.txt" ".FORCE" 7 13.855 6.1109 14.946 5.8933 16.708 5.7362 17.837 6.625 18.405 7.0719 18.813 9.2745 18.959 10.18 solid black
-edge "brew_packages_base.txt" ".FORCE" 7 16.744 7.2509 17.053 7.4982 17.516 7.8993 17.837 8.3194 18.294 8.9163 18.666 9.7153 18.863 10.183 solid black
-edge "test-REF_CALENDAR_001_create.sql" "REF_CALENDAR_001_create.sql" 4 14.255 13.167 14.456 13.204 14.664 13.242 14.868 13.279 solid black
-edge "REF_CALENDAR_001_create.sql" ".FORCE" 7 17.66 13.303 17.723 13.267 17.783 13.227 17.837 13.181 18.526 12.598 18.831 11.532 18.951 10.959 solid black
-edge "record_count-REF_CALENDAR_001.csv" "metric_sample_001.csv" 4 10.769 0.4183 11.087 0.4499 11.413 0.48224 11.71 0.51167 solid black
-edge "uninstall-all" uninstall 4 1.3842 14.253 1.6687 14.304 2.0008 14.364 2.2756 14.413 solid black
-edge "uninstall-all" "uninstall-virtualenv" 4 1.3842 14.024 1.5348 13.997 1.6987 13.968 1.8604 13.939 solid black
-edge uninstall "uninstall-files" 4 3.2936 14.574 3.6916 14.63 4.2932 14.715 4.7725 14.782 solid black
-edge uninstall "uninstall-database" 4 3.2936 14.454 3.647 14.404 4.1609 14.332 4.6072 14.269 solid black
-edge all installcheck 4 3.2303 8.2083 3.6437 8.2083 4.3263 8.2083 4.841 8.2083 solid black
-edge all "initial-documentation" 7 3.1814 8.3325 3.3497 8.4014 3.5588 8.4915 3.7401 8.5833 4.1824 8.8072 4.6657 9.0946 5.0188 9.313 solid black
-edge installcheck "test-gitignore" 7 5.6339 7.9556 5.8192 7.3715 6.36 5.9237 7.3513 5.2083 7.6246 5.0111 7.9826 4.9146 8.2991 4.8685 solid black
-edge installcheck "test-README.md" 4 6.112 8.1137 6.6432 8.0227 7.4571 7.8833 8.0929 7.7743 solid black
-edge installcheck "test-directory_listing.txt" 10 5.9241 8.4603 6.1974 8.6597 6.571 8.955 6.8513 9.2639 7.1205 9.5606 7.0207 9.7876 7.3513 10.014 7.5149 10.126 7.7064 10.205 7.9006 10.261 solid black
-edge installcheck "test-README-TEMPLATE.md" 4 6.112 8.2325 6.5042 8.2497 7.0505 8.2737 7.5655 8.2962 solid black
-edge installcheck "test-LICENSE.md" 7 6.1091 8.4034 6.4599 8.5195 6.9269 8.659 7.3513 8.7361 8.9334 9.0237 10.807 9.1073 11.909 9.1308 solid black
-edge "initial-documentation" "test-directory_listing.txt" 4 6.4801 9.8369 6.9134 9.9301 7.4346 10.042 7.8938 10.141 solid black
-edge "initial-documentation" help 4 6.4801 9.6389 7.1384 9.6389 7.9997 9.6389 8.5379 9.6389 solid black
-edge "README-TEMPLATE.md" "LICENSE.md" 4 14.047 8.4906 14.557 8.5351 15.143 8.5861 15.6 8.626 solid black
-edge "check-base-software" "test-brew_packages_base.txt" 7 5.8842 5.0857 6.2295 5.342 6.8008 5.7325 7.3513 5.9583 7.4713 6.0076 7.5988 6.0508 7.728 6.0888 solid black
-edge "check-base-software" "test-brew_packages_installed.txt" 4 6.4348 5.0216 6.8297 5.1066 7.3044 5.2087 7.7402 5.3025 solid black
-edge "check-base-software" "test-requirements.txt" 10 6.2704 4.5832 6.476 4.4856 6.6886 4.3573 6.8513 4.1944 7.2063 3.839 7.0016 3.5414 7.3513 3.1806 7.5948 2.9292 7.9236 2.7322 8.2268 2.5872 solid black
-edge "check-base-software" "test-requirements_base.txt" 7 6.4379 4.6118 6.7268 4.5491 7.051 4.4894 7.3513 4.4583 8.8087 4.3074 10.495 4.3624 11.612 4.4306 solid black
-edge "check-base-software" "test-gitignore" 4 6.4348 4.8333 7.0087 4.8333 7.7512 4.8333 8.2976 4.8333 solid black
-edge "check-base-software" "test-python-version" 7 6.0364 4.583 6.3918 4.4035 6.893 4.1652 7.3513 4 7.5809 3.9172 7.833 3.8427 8.071 3.7793 solid black
-edge "test-brew_packages_base.txt" "brew_packages_base.txt" 7 10.259 6.5801 10.585 6.6399 10.939 6.6976 11.268 6.7361 12.618 6.8942 14.18 6.9576 15.22 6.983 solid black
-edge "test-brew_packages_installed.txt" "brew_packages_installed.txt" 4 10.29 5.8337 10.691 5.9163 11.138 6.0085 11.546 6.0924 solid black
-edge "test-requirements.txt" "requirements.txt" 4 9.9592 2.2778 10.569 2.2778 11.375 2.2778 11.981 2.2778 solid black
-edge "test-requirements_base.txt" "requirements_base.txt" 4 13.979 4.5278 14.401 4.5278 14.883 4.5278 15.303 4.5278 solid black
-edge "test-gitignore" ".gitignore" 10 9.6543 4.5815 9.995 4.4201 10.425 4.1921 10.768 3.9306 11.025 3.7348 10.988 3.564 11.268 3.4028 11.565 3.2318 11.936 3.1386 12.244 3.088 solid black
-edge "test-python-version" ".python-version" 4 9.9072 3.6046 10.532 3.6414 11.384 3.6915 12.011 3.7283 solid black
-edge "init-tables" "metric-REF_CALENDAR_001" 4 3.4177 12.937 3.6524 12.988 3.9369 13.048 4.2201 13.109 solid black
-edge "init-tables" "check-database" 4 3.4836 12.778 3.8495 12.753 4.3173 12.721 4.7135 12.694 solid black
-edge "metric-REF_CALENDAR_001" "test-REF_CALENDAR_001" 4 6.8527 13.389 7.1362 13.389 7.4367 13.389 7.7214 13.389 solid black
-edge "check-database" "test-REF_CALENDAR_001" 4 6.2359 12.784 6.6639 12.876 7.2314 12.999 7.7443 13.109 solid black
-edge "check-database" "test-database" 10 6.2374 12.742 6.4484 12.797 6.6724 12.883 6.8513 13.014 7.1743 13.251 7.005 13.562 7.3513 13.764 10.064 15.342 14.043 14.787 15.661 14.467 solid black
-edge "check-database" "test-database_schema.png" 4 6.2359 12.493 6.6848 12.397 7.2872 12.267 7.8191 12.153 solid black
-edge "check-database" "test-database_schema.er" 4 6.2359 12.639 6.7022 12.639 7.334 12.639 7.8804 12.639 solid black
-edge update "update-homebrew" 7 0.89507 7.3786 1.1017 7.6921 1.5013 8.2417 1.9624 8.5833 1.9872 8.6017 2.013 8.6194 2.0397 8.6364 solid black
-edge update "update-pip-packages" 4 1.2146 7.1389 1.3955 7.1389 1.6098 7.1389 1.8224 7.1389 solid black
-edge update check 4 1.1337 6.9996 1.4732 6.8779 1.9682 6.7005 2.3372 6.5682 solid black
-edge "update-pip-packages" "requirements_base.txt" 10 3.7427 7.1861 5.5436 7.2678 9.5866 7.3689 10.768 6.7083 11.109 6.5178 10.951 6.2134 11.268 5.9861 11.915 5.5229 14.008 5.0229 15.308 4.7453 solid black
-edge check installcheck 7 3.2294 6.5191 3.3909 6.5832 3.5801 6.6676 3.7401 6.7639 4.2715 7.0836 4.8171 7.5466 5.1644 7.8616 solid black
-edge check "check-base-software" 4 3.2303 6.1759 3.682 5.9124 4.4551 5.4614 4.9795 5.1555 solid black
-edge check "check-database" 10 3.2266 6.4532 3.4101 6.5053 3.6191 6.5985 3.7401 6.7639 5.0914 8.611 3.0032 9.9633 4.2401 11.889 4.3586 12.073 4.5395 12.218 4.7288 12.328 solid black
-edge check "check-documentation" 10 3.2274 6.4573 3.4088 6.5104 3.6156 6.6032 3.7401 6.7639 4.6353 7.9191 3.276 8.9156 4.2401 10.014 4.309 10.092 4.3932 10.155 4.4852 10.204 solid black
-edge check "check-load-files" 7 2.9935 6.1332 3.2056 5.7319 3.6638 4.9493 4.2401 4.4583 4.3888 4.3317 4.5669 4.2229 4.7426 4.1328 solid black
-edge "test-README.md" "README.md" 4 9.8886 7.6171 10.53 7.6218 11.418 7.6284 12.055 7.633 solid black
-edge "er_relationships.txt" ".FORCE" 7 17.243 11.285 17.439 11.224 17.647 11.154 17.837 11.083 18.042 11.007 18.262 10.915 18.456 10.829 solid black
-edge "test-REF_CALENDAR_001" "test-REF_CALENDAR_001_create.sql" 4 10.258 13.241 10.533 13.206 10.831 13.169 11.123 13.133 solid black
-edge "test-REF_CALENDAR_001" "create-REF_CALENDAR_001" 4 10.258 13.476 10.632 13.504 11.049 13.534 11.437 13.563 solid black
-edge "create-REF_CALENDAR_001" "REF_CALENDAR_001_create.sql" 4 14.15 13.626 14.368 13.62 14.596 13.612 14.82 13.605 solid black
-edge "create-REF_CALENDAR_001" "test-database" 4 14.15 13.898 14.659 13.991 15.228 14.095 15.664 14.174 solid black
-edge "requirements_base.txt" ".FORCE" 7 16.703 4.7828 17.026 5.0828 17.542 5.6109 17.837 6.1667 18.563 7.5321 18.869 9.3783 18.973 10.176 solid black
-edge "check-documentation" "test-makefile_graph.png" 4 6.4801 10.587 6.9097 10.679 7.4258 10.79 7.8821 10.889 solid black
-edge "check-documentation" "test-directory_listing.txt" 4 6.4801 10.389 6.9134 10.389 7.4346 10.389 7.8938 10.389 solid black
-edge "test-makefile_graph.png" "makefile_graph.png" 4 10.098 11.014 11.498 10.844 13.994 10.541 15.383 10.372 solid black
-edge "test-directory_listing.txt" "directory_listing.txt" 4 10.083 10.266 11.484 10.096 14.004 9.7895 15.396 9.6204 solid black
-edge "test-database" "create-database" 4 16.998 14.306 17.351 14.306 17.805 14.306 18.194 14.306 solid black
-edge "test-database_schema.png" "database_schema.png" 4 10.161 11.753 10.671 11.689 11.277 11.613 11.784 11.55 solid black
-edge "test-database_schema.er" "database_schema.er" 4 10.096 12.511 10.641 12.443 11.31 12.359 11.852 12.292 solid black
-edge "test-README-TEMPLATE.md" "README-TEMPLATE.md" 4 10.411 8.3709 10.776 8.3736 11.172 8.3765 11.536 8.3792 solid black
-edge "requirements.txt" "requirements_base.txt" 7 13.603 2.3646 13.883 2.4195 14.2 2.5085 14.462 2.6528 15.157 3.0347 15.778 3.7363 16.116 4.1646 solid black
-edge "install-pip-packages" "requirements_base.txt" 7 3.7226 1.5126 6.2449 1.4738 13.522 1.4067 14.462 1.9028 15.387 2.3906 15.98 3.5452 16.238 4.1474 solid black
-edge "install-pip-packages" "install-python-local-virtualenv" 4 3.7199 1.3586 3.855 1.3319 3.9976 1.3036 4.1411 1.2752 solid black
-edge "database_schema.png" ".FORCE" 4 13.805 11.289 15.091 11.111 17.38 10.796 18.444 10.649 solid black
-edge "database_schema.png" "er_relationships.txt" 4 13.805 11.446 14.302 11.462 14.914 11.481 15.418 11.497 solid black
-edge "makefile_graph.txt" ".FORCE" 7 17.247 12.649 17.453 12.584 17.665 12.491 17.837 12.361 18.327 11.993 18.674 11.358 18.861 10.952 solid black
-edge "database_schema.er" ".FORCE" 7 13.735 12.313 14.764 12.447 16.518 12.54 17.837 11.903 18.265 11.696 18.605 11.258 18.808 10.94 solid black
-edge "database_schema.er" "er_relationships.txt" 4 13.737 12.01 14.245 11.918 14.89 11.8 15.417 11.704 solid black
-edge "test-metric_sample_001.csv" "metric_sample_001.csv" 4 10.243 0.88392 10.708 0.83772 11.242 0.78471 11.705 0.73875 solid black
-edge "check-load-files" "test-metric_sample_001.csv" 7 5.7522 3.5645 6.0585 3.1715 6.6899 2.4101 7.3513 1.9028 7.6523 1.6719 8.0206 1.4678 8.3368 1.3124 solid black
-edge "test-LICENSE.md" "LICENSE.md" 4 13.679 9.0375 14.255 8.9645 15.028 8.8665 15.6 8.794 solid black
-edge "calculate-metrics" "record_count-REF_CALENDAR_001.csv" 4 6.5399 0.25 6.7484 0.25 6.975 0.25 7.2039 0.25 solid black
-edge "calculate-metrics" "test-metric_sample_001.csv" 4 6.3075 0.41089 6.7244 0.5006 7.2557 0.6149 7.7391 0.7189 solid black
-edge "directory_listing.txt" ".FORCE" 7 17.262 9.6826 17.455 9.7353 17.656 9.7993 17.837 9.875 18.074 9.9734 18.32 10.112 18.526 10.239 solid black
-edge "makefile_graph.png" ".FORCE" 4 17.277 10.356 17.661 10.403 18.102 10.457 18.444 10.499 solid black
-edge documentation "test-makefile_graph.png" 4 6.3769 11.426 6.8239 11.378 7.3852 11.318 7.8776 11.265 solid black
-edge documentation "test-directory_listing.txt" 7 6.0078 11.3 6.3652 11.136 6.882 10.913 7.3513 10.764 7.5252 10.709 7.7117 10.659 7.895 10.614 solid black
-edge documentation "test-database_schema.png" 4 6.3769 11.602 6.8055 11.648 7.3394 11.705 7.8167 11.757 solid black
-edge documentation "test-database_schema.er" 7 6.0078 11.728 6.3652 11.892 6.882 12.115 7.3513 12.264 7.5218 12.318 7.7043 12.367 7.8841 12.411 solid black
-edge install ".gitignore" 7 1.1845 2.6185 1.4159 2.6294 1.7045 2.6425 1.9624 2.6528 5.8794 2.8096 10.591 2.9583 12.243 3.0092 solid black
-edge install check 4 0.87596 2.8344 1.2286 3.4735 2.2009 5.2355 2.6297 6.0125 solid black
-edge install "install-pip-packages" 7 1.045 2.4134 1.2883 2.2674 1.6422 2.0621 1.9624 1.9028 2.0059 1.8811 2.0509 1.8595 2.0966 1.8382 solid black
-edge install "git-init" 4 1.1685 2.5326 1.5043 2.4813 1.9748 2.4095 2.3306 2.3551 solid black
+graph 1 20.841 19.722
+node "brew_packages_installed.txt" 13.98 8.0556 2.3611 0.5 "brew_packages_installed.txt" solid rectangle black lightgrey
+node "brew_packages_base.txt" 17.515 8.0556 2.0694 0.5 "brew_packages_base.txt" solid rectangle black lightgrey
+node ".FORCE" 20.147 12.806 0.88889 0.5 ".FORCE" solid rectangle black lightgrey
+node "test-REF_CALENDAR_001_create.sql" 13.98 15.417 3.1944 0.5 "test-REF_CALENDAR_001_create.sql" solid rectangle black lightgrey
+node "REF_CALENDAR_001_create.sql" 17.515 15.417 2.875 0.5 "REF_CALENDAR_001_create.sql" solid rectangle black lightgrey
+node "record_count-REF_CALENDAR_001.csv" 9.617 0.25 3.4167 0.5 "record_count-REF_CALENDAR_001.csv" solid rectangle black lightgrey
+node "metric_sample_001.csv" 13.98 1.75 2.0278 0.5 "metric_sample_001.csv" solid rectangle black lightgrey
+node "uninstall-all" 0.73119 18.722 1.4624 0.5 "uninstall-all" solid ellipse black lightgrey
+node uninstall 2.8513 19.097 0.875 0.5 uninstall solid rectangle black lightgrey
+node "uninstall-virtualenv" 2.8513 18.347 1.6944 0.5 "uninstall-virtualenv" solid rectangle black lightgrey
+node all 2.8513 9.8472 0.75 0.5 all solid ellipse black lightgrey
+node installcheck 5.5457 9.8472 1.125 0.5 installcheck solid rectangle black lightgrey
+node "initial-documentation" 5.5457 12.417 1.8611 0.5 "initial-documentation" solid rectangle black lightgrey
+node "README-TEMPLATE.md" 13.98 11.056 2.3611 0.5 "README-TEMPLATE.md" solid rectangle black lightgrey
+node "LICENSE.md" 17.515 10.306 1.3056 0.5 "LICENSE.md" solid rectangle black lightgrey
+node "check-base-software" 5.5457 7.6111 1.7778 0.5 "check-base-software" solid rectangle black lightgrey
+node "test-brew_packages_base.txt" 13.98 7.3056 2.3889 0.5 "test-brew_packages_base.txt" solid rectangle black lightgrey
+node "test-brew_packages_installed.txt" 9.617 8.1389 2.6944 0.5 "test-brew_packages_installed.txt" solid rectangle black lightgrey
+node "test-requirements.txt" 9.617 5.0556 1.7917 0.5 "test-requirements.txt" solid rectangle black lightgrey
+node "test-requirements_base.txt" 13.98 5.8056 2.2222 0.5 "test-requirements_base.txt" solid rectangle black lightgrey
+node "test-gitignore" 9.617 8.8889 1.2361 0.5 "test-gitignore" solid rectangle black lightgrey
+node "test-python-version" 9.617 6.8611 1.6944 0.5 "test-python-version" solid rectangle black lightgrey
+node ".gitignore" 13.98 8.8056 0.95833 0.5 ".gitignore" solid rectangle black lightgrey
+node "init-tables" 2.8513 16.542 1.2818 0.5 "init-tables" solid ellipse black lightgrey
+node "metric-REF_CALENDAR_001" 5.5457 16.542 2.6111 0.5 "metric-REF_CALENDAR_001" solid rectangle black lightgrey
+node META_TABLES_001 13.98 17.764 1.9306 0.5 META_TABLES_001 solid rectangle black lightgrey
+node "check-database" 5.5457 15.792 1.375 0.5 "check-database" solid rectangle black lightgrey
+node "number_check-metric_sample_001.csv" 9.617 2.5 4.1705 0.5 "number_check-metric_sample_001.csv" solid ellipse black lightgrey
+node "uninstall-files" 5.5457 19.472 1.2639 0.5 "uninstall-files" solid rectangle black lightgrey
+node "uninstall-database" 5.5457 18.722 1.5833 0.5 "uninstall-database" solid rectangle black lightgrey
+node update 0.73119 8.5139 0.95686 0.5 update solid ellipse black lightgrey
+node "update-homebrew" 2.8513 10.597 1.5972 0.5 "update-homebrew" solid rectangle black lightgrey
+node "update-pip-packages" 2.8513 5.5833 1.7778 0.5 "update-pip-packages" solid rectangle black lightgrey
+node check 2.8513 8.5139 0.75 0.5 check solid rectangle black lightgrey
+node "test-README.md" 9.617 10.167 1.6528 0.5 "test-README.md" solid rectangle black lightgrey
+node "README.md" 13.98 10.306 1.3333 0.5 "README.md" solid rectangle black lightgrey
+node "er_relationships.txt" 17.515 14.083 1.6806 0.5 "er_relationships.txt" solid rectangle black lightgrey
+node "regex_check-metric_sample_001.csv-C3" 9.617 1.75 4.3149 0.5 "regex_check-metric_sample_001.csv-C3" solid ellipse black lightgrey
+node "test-REF_CALENDAR_001" 9.617 16.167 2.3889 0.5 "test-REF_CALENDAR_001" solid rectangle black lightgrey
+node "create-REF_CALENDAR_001" 13.98 16.167 2.5694 0.5 "create-REF_CALENDAR_001" solid rectangle black lightgrey
+node "requirements_base.txt" 17.515 5.0556 1.9028 0.5 "requirements_base.txt" solid rectangle black lightgrey
+node "check-documentation" 5.5457 11.667 1.8611 0.5 "check-documentation" solid rectangle black lightgrey
+node "test-makefile_graph.png" 9.617 13.167 2.0694 0.5 "test-makefile_graph.png" solid rectangle black lightgrey
+node "test-makefile_graph.txt" 9.617 11.667 1.9861 0.5 "test-makefile_graph.txt" solid rectangle black lightgrey
+node "test-directory_listing.txt" 9.617 12.417 2.0417 0.5 "test-directory_listing.txt" solid rectangle black lightgrey
+node "test-database" 17.515 16.486 1.1944 0.5 "test-database" solid rectangle black lightgrey
+node "test-database_schema.png" 9.617 14.667 2.1944 0.5 "test-database_schema.png" solid rectangle black lightgrey
+node "test-database_schema.er" 9.617 15.417 2.0694 0.5 "test-database_schema.er" solid rectangle black lightgrey
+node "test-META_TABLES_001" 9.617 17.444 2.25 0.5 "test-META_TABLES_001" solid rectangle black lightgrey
+node help 9.617 13.917 0.75 0.5 help solid rectangle black lightgrey
+node "test-README-TEMPLATE.md" 9.617 10.917 2.6944 0.5 "test-README-TEMPLATE.md" solid rectangle black lightgrey
+node "requirements.txt" 13.98 5.0556 1.4722 0.5 "requirements.txt" solid rectangle black lightgrey
+node "install-pip-packages" 2.8513 3.8889 1.7361 0.5 "install-pip-packages" solid rectangle black lightgrey
+node "install-python-local-virtualenv" 5.5457 3.25 2.5278 0.5 "install-python-local-virtualenv" solid rectangle black lightgrey
+node "database_schema.png" 13.98 13.917 1.875 0.5 "database_schema.png" solid rectangle black lightgrey
+node ".python-version" 13.98 6.5556 1.4167 0.5 ".python-version" solid rectangle black lightgrey
+node "database_schema.er" 13.98 14.667 1.7361 0.5 "database_schema.er" solid rectangle black lightgrey
+node "test-metric_sample_001.csv" 9.617 3.25 2.3611 0.5 "test-metric_sample_001.csv" solid rectangle black lightgrey
+node "check-load-files" 5.5457 6.8611 1.4444 0.5 "check-load-files" solid rectangle black lightgrey
+node "test-LICENSE.md" 13.98 9.5556 1.625 0.5 "test-LICENSE.md" solid rectangle black lightgrey
+node "calculate-metrics" 5.5457 1.375 1.9859 0.5 "calculate-metrics" solid ellipse black lightgrey
+node "directory_listing.txt" 17.515 12.056 1.7222 0.5 "directory_listing.txt" solid rectangle black lightgrey
+node "makefile_graph.png" 17.515 12.806 1.75 0.5 "makefile_graph.png" solid rectangle black lightgrey
+node "makefile_graph.txt" 13.98 11.806 1.6667 0.5 "makefile_graph.txt" solid rectangle black lightgrey
+node "field_count_check-metric_sample_001.csv" 9.617 1 4.5315 0.5 "field_count_check-metric_sample_001.csv" solid ellipse black lightgrey
+node "create-database" 20.147 16.486 1.3889 0.5 "create-database" solid rectangle black lightgrey
+node documentation 5.5457 13.917 1.7693 0.5 documentation solid ellipse black lightgrey
+node install 0.73119 5.5278 0.9027 0.5 install solid ellipse black lightgrey
+node "git-init" 2.8513 4.8333 0.75 0.5 "git-init" solid rectangle black lightgrey
+edge "brew_packages_installed.txt" "brew_packages_base.txt" 4 15.162 8.0556 15.54 8.0556 15.959 8.0556 16.337 8.0556 solid black
+edge "brew_packages_installed.txt" ".FORCE" 10 15.164 8.3067 15.304 8.3444 15.445 8.3859 15.577 8.4306 17.133 8.9553 17.808 8.7534 18.952 9.9306 19.642 10.64 19.949 11.808 20.068 12.414 solid black
+edge "brew_packages_base.txt" ".FORCE" 7 18.091 8.3056 18.385 8.4626 18.73 8.6914 18.952 8.9861 19.755 10.052 20.018 11.671 20.099 12.411 solid black
+edge "test-REF_CALENDAR_001_create.sql" "REF_CALENDAR_001_create.sql" 4 15.578 15.417 15.696 15.417 15.814 15.417 15.931 15.417 solid black
+edge "REF_CALENDAR_001_create.sql" ".FORCE" 7 18.539 15.166 18.687 15.1 18.831 15.019 18.952 14.917 19.503 14.454 19.845 13.665 20.011 13.194 solid black
+edge "record_count-REF_CALENDAR_001.csv" "metric_sample_001.csv" 7 11.331 0.471 11.519 0.51378 11.707 0.56463 11.883 0.625 12.457 0.8218 13.062 1.1661 13.472 1.4221 solid black
+edge "uninstall-all" uninstall 4 1.3842 18.837 1.6687 18.888 2.0008 18.947 2.2756 18.997 solid black
+edge "uninstall-all" "uninstall-virtualenv" 4 1.3842 18.608 1.5348 18.581 1.6987 18.551 1.8604 18.522 solid black
+edge uninstall "uninstall-files" 4 3.2936 19.157 3.6916 19.213 4.2932 19.298 4.7725 19.365 solid black
+edge uninstall "uninstall-database" 4 3.2936 19.037 3.647 18.987 4.1609 18.915 4.6072 18.852 solid black
+edge all installcheck 4 3.2303 9.8472 3.6437 9.8472 4.3263 9.8472 4.841 9.8472 solid black
+edge all "initial-documentation" 10 3.2114 9.919 3.3926 9.9734 3.6044 10.067 3.7401 10.222 4.2913 10.854 3.6514 11.444 4.2401 12.042 4.3111 12.114 4.3951 12.172 4.4856 12.219 solid black
+edge installcheck "test-gitignore" 7 6.1093 9.6765 6.4622 9.5702 6.9313 9.4348 7.3513 9.3333 7.8511 9.2126 8.4191 9.1006 8.8597 9.0193 solid black
+edge installcheck "test-README.md" 4 6.1091 9.8906 6.761 9.9421 7.8588 10.029 8.6501 10.091 solid black
+edge installcheck "test-directory_listing.txt" 10 5.8044 10.099 6.0731 10.38 6.5115 10.853 6.8513 11.292 7.0965 11.608 7.0148 11.824 7.3513 12.042 7.6744 12.251 8.0764 12.355 8.4509 12.404 solid black
+edge installcheck "test-README-TEMPLATE.md" 7 6.1106 10.095 6.46 10.243 6.9249 10.425 7.3513 10.542 7.5991 10.61 7.8659 10.667 8.1261 10.715 solid black
+edge installcheck "test-LICENSE.md" 4 6.1112 9.8281 7.5181 9.7793 11.254 9.6497 13.018 9.5885 solid black
+edge "initial-documentation" "test-directory_listing.txt" 4 6.4771 12.417 7.0631 12.417 7.8276 12.417 8.4539 12.417 solid black
+edge "initial-documentation" help 7 5.8756 12.67 6.2182 12.931 6.7916 13.329 7.3513 13.542 7.9263 13.76 8.6318 13.851 9.0982 13.89 solid black
+edge "README-TEMPLATE.md" "LICENSE.md" 4 15.162 10.806 15.675 10.696 16.263 10.57 16.721 10.472 solid black
+edge "check-base-software" "test-brew_packages_base.txt" 4 6.4354 7.5793 7.9121 7.5256 10.905 7.4168 12.64 7.3537 solid black
+edge "check-base-software" "test-brew_packages_installed.txt" 4 6.437 7.7256 6.9305 7.79 7.5597 7.8722 8.127 7.9462 solid black
+edge "check-base-software" "test-requirements.txt" 10 6.4382 7.4857 6.5912 7.43 6.7375 7.3502 6.8513 7.2361 7.4184 6.6677 6.7597 6.043 7.3513 5.5 7.6796 5.1986 8.151 5.0757 8.5776 5.0329 solid black
+edge "check-base-software" "test-requirements_base.txt" 10 6.4393 7.4462 6.5853 7.3942 6.7289 7.3259 6.8513 7.2361 7.1743 6.9992 7.0082 6.693 7.3513 6.4861 9.0024 5.4904 11.315 5.5042 12.723 5.6341 solid black
+edge "check-base-software" "test-gitignore" 7 5.9678 7.8617 6.3213 8.0677 6.853 8.351 7.3513 8.5139 7.8408 8.6739 8.4135 8.7681 8.8589 8.822 solid black
+edge "check-base-software" "test-python-version" 4 6.437 7.4484 7.0832 7.3285 7.962 7.1655 8.6298 7.0417 solid black
+edge "test-brew_packages_base.txt" "brew_packages_base.txt" 4 15.167 7.5563 15.544 7.6371 15.963 7.7266 16.339 7.8072 solid black
+edge "test-brew_packages_installed.txt" "brew_packages_installed.txt" 4 10.967 8.1132 11.505 8.1029 12.123 8.091 12.658 8.0807 solid black
+edge "test-requirements.txt" "requirements.txt" 4 10.513 5.0556 11.269 5.0556 12.352 5.0556 13.102 5.0556 solid black
+edge "test-requirements_base.txt" "requirements_base.txt" 4 15.094 5.5703 15.516 5.48 15.998 5.3771 16.418 5.2871 solid black
+edge "test-gitignore" ".gitignore" 4 10.238 8.8772 11.063 8.8614 12.527 8.8332 13.354 8.8173 solid black
+edge "test-python-version" ".python-version" 4 10.467 6.8022 11.233 6.7482 12.363 6.6685 13.13 6.6145 solid black
+edge "init-tables" "metric-REF_CALENDAR_001" 4 3.4971 16.542 3.6803 16.542 3.8882 16.542 4.0994 16.542 solid black
+edge "init-tables" META_TABLES_001 10 3.3147 16.715 4.1126 17.012 5.8354 17.608 7.3513 17.819 9.3459 18.098 9.869 17.846 11.883 17.819 12.204 17.815 12.554 17.807 12.873 17.799 solid black
+edge "init-tables" "check-database" 4 3.3793 16.397 3.759 16.29 4.2833 16.143 4.7194 16.02 solid black
+edge "metric-REF_CALENDAR_001" "test-REF_CALENDAR_001" 4 6.8557 16.421 7.31 16.379 7.8206 16.332 8.2773 16.29 solid black
+edge "check-database" "test-REF_CALENDAR_001" 4 6.2364 15.854 6.7927 15.906 7.5977 15.981 8.2811 16.044 solid black
+edge "check-database" "test-database" 10 6.2341 15.938 6.4382 15.995 6.6591 16.071 6.8513 16.167 7.0998 16.291 7.0877 16.454 7.3513 16.542 9.098 17.124 14.757 16.719 16.776 16.55 solid black
+edge "check-database" "test-database_schema.png" 7 6.0695 15.541 6.4219 15.377 6.9058 15.17 7.3513 15.042 7.6793 14.947 8.0415 14.874 8.3777 14.818 solid black
+edge "check-database" "test-database_schema.er" 4 6.2364 15.729 6.836 15.673 7.7246 15.591 8.4383 15.525 solid black
+edge "check-database" "test-META_TABLES_001" 10 6.2345 15.888 6.4477 15.943 6.6737 16.03 6.8513 16.167 7.1934 16.43 6.9979 16.752 7.3513 17 7.642 17.204 8.0033 17.32 8.3509 17.385 solid black
+edge "number_check-metric_sample_001.csv" "metric_sample_001.csv" 7 10.859 2.2986 11.191 2.2432 11.551 2.1825 11.883 2.125 12.189 2.072 12.52 2.013 12.826 1.9579 solid black
+edge update "update-homebrew" 7 0.86204 8.7553 1.0487 9.1183 1.4463 9.8063 1.9624 10.222 1.9836 10.239 2.0057 10.256 2.0286 10.272 solid black
+edge update "update-pip-packages" 4 0.91276 8.279 1.2764 7.7697 2.1398 6.5604 2.5758 5.9497 solid black
+edge update check 4 1.2146 8.5139 1.5463 8.5139 1.9904 8.5139 2.3301 8.5139 solid black
+edge "update-pip-packages" "requirements_base.txt" 10 3.7426 5.3529 4.6412 5.1297 6.0824 4.807 7.3513 4.6806 10.989 4.3181 11.938 4.3292 15.577 4.6806 15.854 4.7073 16.15 4.7551 16.425 4.8079 solid black
+edge check installcheck 4 3.2303 8.6965 3.6603 8.9115 4.3818 9.2722 4.9025 9.5326 solid black
+edge check "check-base-software" 4 3.2303 8.3903 3.5954 8.2667 4.1706 8.0719 4.6546 7.9081 solid black
+edge check "check-database" 10 3.179 8.7639 3.3756 8.9397 3.6147 9.1927 3.7401 9.4722 4.6215 11.437 3.3874 12.314 4.2401 14.292 4.4365 14.747 4.8218 15.166 5.1207 15.444 solid black
+edge check "check-documentation" 10 3.1139 8.7649 3.2953 8.953 3.543 9.2203 3.7401 9.4722 3.987 9.7877 3.9949 9.9054 4.2401 10.222 4.5415 10.611 4.9203 11.028 5.1896 11.313 solid black
+edge check "check-load-files" 7 3.072 8.2604 3.3205 7.972 3.7639 7.5061 4.2401 7.2361 4.3768 7.1586 4.5309 7.096 4.6838 7.0457 solid black
+edge "test-README.md" "README.md" 4 10.446 10.193 11.227 10.218 12.397 10.255 13.17 10.28 solid black
+edge "er_relationships.txt" ".FORCE" 7 18.359 13.872 18.558 13.808 18.767 13.731 18.952 13.639 19.224 13.505 19.501 13.312 19.719 13.146 solid black
+edge "regex_check-metric_sample_001.csv-C3" "metric_sample_001.csv" 4 11.779 1.75 12.139 1.75 12.5 1.75 12.821 1.75 solid black
+edge "test-REF_CALENDAR_001" "test-REF_CALENDAR_001_create.sql" 7 10.812 15.973 11.157 15.916 11.535 15.852 11.883 15.792 12.066 15.76 12.259 15.726 12.45 15.692 solid black
+edge "test-REF_CALENDAR_001" "create-REF_CALENDAR_001" 4 10.816 16.167 11.352 16.167 11.99 16.167 12.551 16.167 solid black
+edge "create-REF_CALENDAR_001" "REF_CALENDAR_001_create.sql" 4 15.167 15.916 15.496 15.846 15.855 15.769 16.192 15.697 solid black
+edge "create-REF_CALENDAR_001" "test-database" 4 15.265 16.282 15.772 16.329 16.338 16.38 16.773 16.42 solid black
+edge "requirements_base.txt" ".FORCE" 7 17.697 5.3089 17.992 5.7648 18.605 6.7617 18.952 7.6806 19.597 9.3839 19.954 11.544 20.08 12.415 solid black
+edge "check-documentation" "test-makefile_graph.png" 10 6.4797 11.846 6.6117 11.896 6.7402 11.96 6.8513 12.042 7.1743 12.279 7.0148 12.574 7.3513 12.792 7.6715 12.999 8.0691 13.103 8.4406 13.153 solid black
+edge "check-documentation" "test-makefile_graph.txt" 4 6.4771 11.667 7.0718 11.667 7.8503 11.667 8.4816 11.667 solid black
+edge "check-documentation" "test-directory_listing.txt" 7 6.4788 11.867 6.7585 11.925 7.067 11.988 7.3513 12.042 7.7089 12.109 8.0996 12.176 8.4538 12.235 solid black
+edge "test-makefile_graph.png" "makefile_graph.png" 4 10.656 13.12 12.17 13.05 14.988 12.921 16.493 12.852 solid black
+edge "test-makefile_graph.txt" "makefile_graph.txt" 4 10.615 11.698 11.33 11.721 12.293 11.752 13.003 11.775 solid black
+edge "test-directory_listing.txt" "directory_listing.txt" 7 10.641 12.384 11.825 12.345 13.844 12.271 15.577 12.181 15.88 12.165 16.21 12.144 16.509 12.125 solid black
+edge "test-database" "create-database" 4 18.113 16.486 18.466 16.486 18.92 16.486 19.309 16.486 solid black
+edge "test-database_schema.png" "database_schema.png" 7 10.72 14.488 11.089 14.427 11.504 14.357 11.883 14.292 12.214 14.234 12.574 14.17 12.901 14.111 solid black
+edge "test-database_schema.er" "database_schema.er" 7 10.657 15.249 11.042 15.185 11.483 15.111 11.883 15.042 12.238 14.98 12.626 14.911 12.97 14.849 solid black
+edge "test-META_TABLES_001" META_TABLES_001 4 10.747 17.527 11.401 17.575 12.222 17.635 12.871 17.683 solid black
+edge "test-README-TEMPLATE.md" "README-TEMPLATE.md" 4 10.967 10.959 11.505 10.977 12.123 10.997 12.658 11.014 solid black
+edge "requirements.txt" "requirements_base.txt" 4 14.716 5.0556 15.207 5.0556 15.865 5.0556 16.418 5.0556 solid black
+edge "install-pip-packages" "requirements_base.txt" 7 3.7228 3.8366 5.7862 3.7295 11.182 3.5597 15.577 4.3889 15.99 4.4667 16.434 4.6159 16.791 4.7535 solid black
+edge "install-pip-packages" "install-python-local-virtualenv" 4 3.7199 3.6841 3.9198 3.6362 4.1364 3.5843 4.3478 3.5337 solid black
+edge "database_schema.png" ".FORCE" 7 14.921 13.824 15.923 13.713 17.564 13.502 18.952 13.181 19.155 13.134 19.372 13.069 19.565 13.006 solid black
+edge "database_schema.png" "er_relationships.txt" 4 14.92 13.961 15.417 13.984 16.029 14.013 16.533 14.037 solid black
+edge "database_schema.er" ".FORCE" 7 14.851 14.847 15.89 15.018 17.66 15.158 18.952 14.458 19.46 14.183 19.801 13.584 19.981 13.188 solid black
+edge "database_schema.er" "er_relationships.txt" 4 14.852 14.524 15.36 14.439 16.005 14.332 16.532 14.245 solid black
+edge "test-metric_sample_001.csv" "metric_sample_001.csv" 7 10.8 3.1301 11.154 3.074 11.54 2.9925 11.883 2.875 12.457 2.6782 13.062 2.3339 13.472 2.0779 solid black
+edge "check-load-files" "test-metric_sample_001.csv" 7 5.7257 6.6105 6.0185 6.1809 6.6615 5.291 7.3513 4.6806 7.8575 4.2325 8.5185 3.8304 8.9932 3.5674 solid black
+edge "test-LICENSE.md" "LICENSE.md" 4 14.794 9.7267 15.371 9.8501 16.146 10.016 16.719 10.138 solid black
+edge "calculate-metrics" "record_count-REF_CALENDAR_001.csv" 7 6.0094 1.1524 6.3655 0.98462 6.8798 0.76093 7.3513 0.625 7.4855 0.58631 7.6254 0.55116 7.7669 0.51932 solid black
+edge "calculate-metrics" "test-metric_sample_001.csv" 7 5.7745 1.6239 6.0853 1.966 6.6952 2.5733 7.3513 2.875 7.643 3.0091 7.9756 3.0959 8.294 3.1519 solid black
+edge "directory_listing.txt" ".FORCE" 7 18.377 12.272 18.567 12.322 18.767 12.377 18.952 12.431 19.152 12.488 19.369 12.556 19.561 12.618 solid black
+edge "makefile_graph.png" ".FORCE" 4 18.392 12.806 18.776 12.806 19.217 12.806 19.559 12.806 solid black
+edge "field_count_check-metric_sample_001.csv" "metric_sample_001.csv" 7 10.894 1.2073 11.216 1.2611 11.563 1.3195 11.883 1.375 12.189 1.428 12.52 1.487 12.826 1.5421 solid black
+edge documentation "test-makefile_graph.png" 7 6.2517 13.765 6.5837 13.694 6.9874 13.61 7.3513 13.542 7.7055 13.475 8.0921 13.409 8.4435 13.35 solid black
+edge documentation "test-directory_listing.txt" 7 5.8569 13.678 6.1971 13.417 6.7813 13.008 7.3513 12.792 7.698 12.66 8.0921 12.575 8.4527 12.519 solid black
+edge documentation "test-database_schema.png" 7 6.2517 14.068 6.5837 14.14 6.9874 14.223 7.3513 14.292 7.6836 14.354 8.0445 14.417 8.378 14.472 solid black
+edge documentation "test-database_schema.er" 7 5.8569 14.156 6.1971 14.416 6.7813 14.825 7.3513 15.042 7.6931 15.171 8.081 15.256 8.4374 15.312 solid black
+edge install ".gitignore" 13 1.0944 5.6815 1.3337 5.7793 1.6612 5.8984 1.9624 5.9583 4.1275 6.3895 10.175 5.0875 11.883 6.4861 12.573 7.0514 11.746 7.8057 12.383 8.4306 12.638 8.6813 13.029 8.7757 13.358 8.8071 solid black
+edge install check 4 0.90925 5.7621 1.2714 6.279 2.1412 7.5204 2.578 8.1437 solid black
+edge install "install-pip-packages" 7 0.97005 5.3125 1.2082 5.0888 1.5993 4.7337 1.9624 4.4583 2.0706 4.3762 2.1905 4.2934 2.3059 4.2173 solid black
+edge install "git-init" 4 1.124 5.402 1.4644 5.289 1.9666 5.1224 2.3394 4.9986 solid black
 stop

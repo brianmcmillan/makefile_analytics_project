@@ -60,7 +60,7 @@ m4 1.4.19
 makefile2graph 2021.11.06
 mpdecimal 2.5.1
 mpfr 4.1.0
-netpbm 10.86.31
+netpbm 10.86.32
 oniguruma 6.9.7.1
 openexr 3.1.4
 openjpeg 2.4.0
