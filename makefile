@@ -28,205 +28,214 @@ endef
 
 define test-file
 	@# tests the file in the <target>
-	@#<target>(colon)(space)<path/to/directory> 
+	@#<target>{{colon}}{{space}}<path/to/directory> 
 	@[[ -f $@ ]] \
 	&& true \
-	|| echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [FAIL]    $(NAME)     \"testing for $< did not find $@\" 
+	|| echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [FAIL]    $(NAME)     \"testing for $< did not find $@\" >> $(LOGFILE)
 endef
 
 define test-dependent-file
 	@# tests the file in the <first dependency>
 	@[[ -f $< ]] \
 	&& true \
-	|| echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [WARNING]    $@     \"testing for $< did not find $<\" 
+	|| echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [WARNING]    $@     \"testing for $< did not find $<\" >> $(LOGFILE) 
 endef
 
 define uninstall-file
-	@# <target>(colon)(space)<path/to/file(s)>
+	@# <target>{{colon}}{{space}}<path/to/file(s)>
 	@rm -f $^ || true
-	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@     \"Files removed - $^\"
+	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@     \"Files removed - $^\" >> $(LOGFILE)
 endef
 
 define uninstall-file-list
-	@#<target>(colon)(space)FILE=<list of file(s)>
-	@#<target>(colon)(space)
+	@#<target>{{colon}}{{space}}FILE=<list of file(s)>
+	@#<target>{{colon}}{{space}}
 	@rm -f $(FILES)
-	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@     \"Files removed - $(FILES)\"
+	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@     \"Files removed - $(FILES)\" >> $(LOGFILE)
 endef
 
 define directory-listing
-	@#<path/to/directory_listing.txt>(colon)(space).FORCE
+	@#<path/to/directory_listing.txt>{{colon}}{{space}}.FORCE
 	@$(TREE) --prune > $@
-	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Created directory list at $@\"
+	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Created directory list at $@\" >> $(LOGFILE)
 endef
 
 define makefile-graph
 	@$(NODEGRAPH) --direction LR | $(GRAPHVIZDOT) -Tpng > $(basename $@).png
 	@$(NODEGRAPH) --direction LR | $(GRAPHVIZDOT) -Tplain > $(basename $@).txt
-	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Created makefile diagram at $@\"
+	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Created makefile diagram at $@\" >> $(LOGFILE)
 endef
 
 define create-database
-	@#create-database(colon)(space)
+	@#create-database{{colon}}{{space}}
 	@$(SQLITEUTILS) create-database $(DATABASE) --enable-wal
-	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Created database in WAL mode - $(DATABASE)\"
+	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Created database in WAL mode - $(DATABASE)\" >> $(LOGFILE)
 endef
 
 define test-database
+	@#test-database{{colon}}{{space}}
 	@[[ -f $(DATABASE-PATH) ]] \
 	&& true \
-	|| echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [WARNING]    $@     \"testing for $(DATABASE) did not find $(DATABASE-PATH)\"
+	|| echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [WARNING]    $@     \"testing for $(DATABASE) did not find $(DATABASE-PATH)\" >> $(LOGFILE)
 endef
 
 define execute-sql
-	@#<verb>-<table_name>(colon)(space)<path/to/<query_file>.sql> [<path/to/database.db> <dependent tables>]
+	@#<verb>-<table_name>{{colon}}{{space}}<path/to/<query_file>.sql> [<path/to/database.db> <dependent tables>]
 	@$(shell $(SQLITE3) $(DATABASE-PATH) ".read $<" ".quit")
-	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Executed $< on $(DATABASE)\"
+	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Executed $< on $(DATABASE)\" >> $(LOGFILE)
 endef
 
 define test-table
-	@#test-<table_name>(colon)(space)TABLENAME=<table_name>
-	@#test-<table_name>(colon)(space)
+	@#test-<table_name>{{colon}}{{space}}TABLENAME=<table_name>
+	@#test-<table_name>{{colon}}{{space}}
 	@[[ $(shell $(SQLITE3) $(DATABASE-PATH) ".tables $(TABLENAME)" ".quit") == $(TABLENAME) ]] \
 	&& true \
-	|| echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [FAIL]    $@    \"Table $(TABLENAME) not found\" 
+	|| echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [FAIL]    $@    \"Table $(TABLENAME) not found\" >> $(LOGFILE)
 endef
 
 define record-count-table
-	@#record-count-<table name>(colon)(space)TABLENAME=<table_name>
-	@#record-count-<table name>(colon)(space)
-	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"$(shell $(SQLITE3) $(DATABASE-PATH) "SELECT COUNT(*) || ' records in $(DATABASE).$(TABLENAME)' FROM [$(TABLENAME)]" ".quit")\"
+	@#record-count-<table name>{{colon}}{{space}}TABLENAME=<table_name>
+	@#record-count-<table name>{{colon}}{{space}}
+	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"$(shell $(SQLITE3) $(DATABASE-PATH) "SELECT COUNT(*) || ' records in $(DATABASE).$(TABLENAME)' FROM [$(TABLENAME)]" ".quit")\" >> $(LOGFILE)
 endef
 
 define er-diagram
-	@#<path/to/diagram.type>(colon)(space)<path/to/er_relationships.txt>"
+	@#<path/to/diagram.type>{{colon}}{{space}}<path/to/er_relationships.txt>"
 	@#Types can be er, pdf, png, dot
 	@$(ERALCHEMY) -i sqlite:///$(DATABASE-PATH) -o $(subst .,,$(notdir $(DATABASE-PATH))).er
 	@cat $(subst .,,$(notdir $(DATABASE-PATH))).er $< > $(subst .,,$(notdir $(DATABASE-PATH)))_2.er || true
 	@$(ERALCHEMY) -i $(subst .,,$(notdir $(DATABASE-PATH)))_2.er -o $@
 	@rm -f $(subst .,,$(notdir $(DATABASE-PATH)))*.er
-	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Executed er-digram and exported to $@\"
+	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Executed er-digram and exported to $@\" >> $(LOGFILE)
 endef
 
 define metric-record_count
-	@#record_count-<TABLE_NAME.CSV>(colon)(space)TABLENAME=<TABLE_NAME>
-	@#record_count-<TABLE_NAME.CSV>(colon)(space)<path/to/metric_sample.csv>
+	@#record_count-<TABLE_NAME.CSV>{{colon}}{{space}}TABLENAME=<TABLE_NAME>
+	@#record_count-<TABLE_NAME.CSV>{{colon}}{{space}}<path/to/metric_sample.csv>
 	@echo $(PROJECT-PATH)/$(firstword $(MAKEFILE_LIST)).$@,$(DATABASE).$(TABLENAME),"COUNT",record_count,$(shell date -u +"%Y-%m-%dT%H:%M:%SZ"),$(shell $(SQLITE3) $(DATABASE-PATH) "SELECT COUNT(*) FROM [$(TABLENAME)]" ".quit") >> $<
+	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Record count in $(DATABASE).$(TABLENAME) - $(shell $(SQLITE3) $(DATABASE-PATH) "SELECT COUNT(*) FROM [$(TABLENAME)]" ".quit")\" >> $(LOGFILE)
 endef	
 
 define update-homebrew
-	@#update-homebrew(colon)(space)
+	@#update-homebrew{{colon}}{{space}}
 	@$(BREW) update
 	@$(BREW) upgrade
 	@$(BREW) install $(HOMEBREW-PACKAGES)
 	@(echo "$(HOMEBREW-PACKAGES)" | sed -e 's/ /\n/g') > brew_packages_base.txt
 	$(BREW) list --versions > brew_packages_installed.txt
-	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Homebrew software updated\"
+	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Homebrew software updated\" >> $(LOGFILE)
 endef
 
 define update-pip-packages
-	@#update-pip-packages(colon)(space)requirements_base.txt
+	@#update-pip-packages{{colon}}{{space}}requirements_base.txt
 	@$(shell pyenv which pip) install --upgrade pip
 	@$(shell pyenv which pip) install -r $<
 	@$(shell pyenv which pip) freeze > requirements.txt
-	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Python pip packages upgraded - requirements.txt\"
+	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Python pip packages upgraded - requirements.txt\" >> $(LOGFILE)
 endef
 
 define update-macos
-	@#update-macos(colon)(space)
+	@#update-macos{{colon}}{{space}}
 	@softwareupdate --all --install --force
-	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"macOS software updated\"
+	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"macOS software updated\" >> $(LOGFILE)
 endef
 
 define install-pip-packages
-	@#install-pip-packages(colon)(space)requirements_base.txt install-python-local-virtualenv
+	@#install-pip-packages{{colon}}{{space}}requirements_base.txt install-python-local-virtualenv
 	@$(shell pyenv which pip) install --upgrade pip
 	@$(shell pyenv which pip) install -r $<
 	@$(shell pyenv which pip) freeze > requirements.txt
-	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Python pip packages installed - requirements.txt\"
+	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Python pip packages installed - requirements.txt\" >> $(LOGFILE)
 endef
 
 define freeze-pip
-	@#requirements.txt(colon)(space)requirements_base.txt
+	@#requirements.txt{{colon}}{{space}}requirements_base.txt
 	@$(shell pyenv which pip) freeze > $@
-	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Python pip packages installed - requirements.txt\"
+	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Python pip packages installed - requirements.txt\" >> $(LOGFILE)
 endef
 
 define install-python-local-virtualenv
-	@#install-python-local-virtualenv(colon)(space)
+	@#install-python-local-virtualenv{{colon}}{{space}}
 	@pyenv virtualenv $(PYTHON-VERSION) $(PROJECT-NAME) || true
 	@pyenv local $(PROJECT-NAME)
 	@cd ..
 	@cd $(PROJECT-PATH)
-	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Python location - $(shell pyenv which python)\" 
-	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"PIP location - $(shell pyenv which pip)\"
+	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Python location - $(shell pyenv which python)\"  >> $(LOGFILE)
+	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"PIP location - $(shell pyenv which pip)\" >> $(LOGFILE)
 endef
 
 define list-brew-packages
-	@#brew_packages_installed.txt(colon)(space)brew_packages_base.txt .FORCE
+	@#brew_packages_installed.txt{{colon}}{{space}}brew_packages_base.txt .FORCE
 	@$(BREW) list --versions > $@
-	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Created $@\"
+	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Created $@\" >> $(LOGFILE)
 endef
 
 define base-brew-package-list
-	@#brew_packages_base.txt(colon)(space).FORCE
+	@#brew_packages_base.txt{{colon}}{{space}}.FORCE
 	@(echo "$(HOMEBREW-PACKAGES)" | sed -e 's/ /\n/g') > $@
-	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Created $@\" 
+	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Created $@\"  >> $(LOGFILE)
 endef	
 
 define uninstall-virtualenv
-	@#uninstall-virtualenv(colon)(space)
+	@#uninstall-virtualenv{{colon}}{{space}}
 	@pyenv virtualenv-delete $(PROJECT-NAME) || true
 	@rm -f .python-version
-	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Virtual environment removed - $(PROJECT-NAME)\"
+	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Virtual environment removed - $(PROJECT-NAME)\" >> $(LOGFILE)
 endef
 
 define metadata-tables
-	@#META_TABLES_001(colon)(space)
+	@#META_TABLES_001{{colon}}{{space}}
 	@$(SQLITE3) $(DATABASE-PATH) "DROP TABLE IF EXISTS '_analyze_tables_';" ".quit"
 	@$(SQLITE3) $(DATABASE-PATH) "DROP TABLE IF EXISTS 'META_TABLES_001';" ".quit"
 	@$(SQLITEUTILS) analyze-tables $(DATABASE-PATH) --save
 	@$(SQLITE3) $(DATABASE-PATH) "ALTER TABLE '_analyze_tables_' RENAME TO 'META_TABLES_001';" ".quit"
-	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"$(shell $(SQLITE3) $(DATABASE-PATH) "SELECT COUNT(*) || ' records in $(DATABASE).META_TABLES_001' FROM META_TABLES_001" ".quit")\"
+	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"$(shell $(SQLITE3) $(DATABASE-PATH) "SELECT COUNT(*) || ' records in $(DATABASE).META_TABLES_001' FROM META_TABLES_001" ".quit")\" >> $(LOGFILE)
 endef
 
 define csv_field_count_check
-	@#field_count_check-<file_name.csv>(colon)(space)EXPECTED=<number_of_columns>
-	@#field_count_check-<file_name.csv>(colon)(space)<path/to/file.csv>
+	@#field_count_check-<file_name.csv>{{colon}}{{space}}EXPECTED=<number_of_columns>
+	@#field_count_check-<file_name.csv>{{colon}}{{space}}<path/to/file.csv>
 	@[[ $$(datamash -t, check $(EXPECTED) fields < $<) ]] \
 	&& true \
-	|| echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [FAIL]    $@    \"Expected fields not equal to $(EXPECTED)\"
+	|| echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [FAIL]    $@    \"Expected fields not equal to $(EXPECTED)\" >> $(LOGFILE)
 endef
 
 define csv_number_check
-	@#number_check-<file_name.csv>(colon)(space)COLUMN=<column_number>
-	@#number_check-<file_name.csv>(colon)(space)<path/to/file.csv>
+	@#number_check-<file_name.csv>{{colon}}{{space}}COLUMN=<column_number>
+	@#number_check-<file_name.csv>{{colon}}{{space}}<path/to/file.csv>
 	@[[ $$(datamash -t, --header-in sum $(COLUMN) < metric_sample_001.csv) ]] \
 	&& true \
-	|| echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [FAIL]    $@    \"Expected numeric data in column $(COLUMN)\"
+	|| echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [FAIL]    $@    \"Expected numeric data in column $(COLUMN)\" >> $(LOGFILE)
 endef
 
 define csv_regex_check
-	@#regex_check-<file_name.csv>(colon)(space)COLUMN=<column_number>
-	@#regex_check-<file_name.csv>(colon)(space)REGEX=<^[[:space:]\"a-zA-Z0-9\/,.:_-]+$$>
-	@#regex_check-<file_name.csv>(colon)(space)<path/to/file.csv>
+	@#regex_check-<file_name.csv>{{colon}}{{space}}COLUMN=<column_number>
+	@#regex_check-<file_name.csv>{{colon}}{{space}}REGEX=<^[[:space:]\"a-zA-Z0-9\/,.:_-]+$$>
+	@#regex_check-<file_name.csv>{{colon}}{{space}}<path/to/file.csv>
 	@[[ $$(datamash -t, --header-in unique $(COLUMN) < metric_sample_001.csv) =~ $(REGEX) ]] \
 	&& true \
-	|| echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [FAIL]    $@    \"Column $(COLUMN) - $(REGEX) not matched\"
+	|| echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [FAIL]    $@    \"Column $(COLUMN) - $(REGEX) not matched\" >> $(LOGFILE)
 endef
 
 define compact-database
-	@#compact-database(colon)(space)<path/to/database.db>
-	@$(SQLITE3) $< "PRAGMA optimize;" && echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Optimized $<\"
-	@$(SQLITE3) $< "PRAGMA auto_vacuum = FULL;" && $(SQLITE3) $< "VACUUM;" && echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Vacuumed $<\"
-	@$(SQLITE3) $< "PRAGMA integrity_check;" && echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Performed integrity check on $<\"
+	@#compact-database{{colon}}{{space}}<path/to/database.db>
+	@$(SQLITE3) $< "PRAGMA optimize;" && echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Optimized $<\" >> $(LOGFILE)
+	@$(SQLITE3) $< "PRAGMA auto_vacuum = FULL;" && $(SQLITE3) $< "VACUUM;" && echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Vacuumed $<\" >> $(LOGFILE)
+	@$(SQLITE3) $< "PRAGMA integrity_check;" && echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Performed integrity check on $<\" >> $(LOGFILE)
 endef
 
 define backup-database
-	@#backup-database(colon)(space)BACKUPFILEPATH=<path/to/database.bak>
-	@#backup-database(colon)(space)<path/to/database.db>
+	@#backup-database{{colon}}{{space}}BACKUPFILEPATH=<path/to/database.bak>
+	@#backup-database{{colon}}{{space}}<path/to/database.db>
 	@$(SQLITE3) $< ".backup $(BACKUPFILEPATH)"
-	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Backed up $< into $(BACKUPFILEPATH)\"
+	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Backed up $< into $(BACKUPFILEPATH)\" >> $(LOGFILE)
+endef
+
+define log-rotate
+	@#log-rotate{{colon}}{{space}}LOGFILEPATH=<path/to/logfile>
+	@#log-rotate{{colon}}{{space}}<dependencies>
+	@mv $(LOGFILEPATH) $(basename $(LOGFILEPATH))_$(shell date +%Y-%m-%d).log
+	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Rotated $(LOGFILEPATH) into $(basename $(LOGFILEPATH))_$(shell date +%Y-%m-%d).txt\" >> $(LOGFILE)
 endef
 
 ############################################################################
@@ -266,6 +275,10 @@ SQLITEUTILS := $(PYENVDIR)/sqlite-utils
 NODEGRAPH := $(PYENVDIR)/makefile2dot
 ERALCHEMY := $(PYENVDIR)/eralchemy
 DATASETTE := $(PYENVDIR)/datasette
+
+# Project directory structure
+LOGFILE := $(PROJECT-PATH)/$(PROJECT-NAME).log
+
 
 #######################################
 all: installcheck initial-documentation ## Executes the default make task.
@@ -414,6 +427,7 @@ requirements_base.txt: .FORCE
 	@echo datasette-copyable==0.3.1 >> $@
 	@echo datasette-vega==0.6.2 >> $@
 	@echo datasette-yaml==0.1.1 >> $@
+	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Created $@\" >> $(LOGFILE)
 
 requirements.txt: requirements_base.txt
 	$(freeze-pip)
@@ -446,13 +460,15 @@ git-init:
 ############################################################################
 
 compact-database: $(DATABASE-PATH) ## Database maintenance scripts.
-	@$(compact-database)
+	$(compact-database)
 
 backup-database: BACKUPFILEPATH=$(DATABASE-PATH).bak
 backup-database: $(DATABASE-PATH)
-	@$(backup-database)
+	$(backup-database)
 
-
+log-rotate: LOGFILEPATH=$(LOGFILE)
+log-rotate: 
+	$(log-rotate)
 
 
 ############################################################################
@@ -500,7 +516,7 @@ uninstall-virtualenv:
 	@echo ".DS_Store" > $@
 	@echo ".DS_Store?" >> $@
 	@echo "*.DS_Store" >> $@
-	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Created $@\"
+	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Created $@\" >> $(LOGFILE)
 
 README-TEMPLATE.md: LICENSE.md
 	@echo "# $(PROJECT-NAME)" >> $@
@@ -555,7 +571,7 @@ README-TEMPLATE.md: LICENSE.md
 	@echo " " >> $@
 	@echo "### License" >> $@
 	@echo "[MIT](LICENSE.md)" >> $@
-	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Created $@\"
+	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Created $@\" >> $(LOGFILE)
 
 LICENSE.md:
 	@echo "# MIT License" >> $@
@@ -578,7 +594,7 @@ LICENSE.md:
 	@echo "LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM," >> $@
 	@echo "OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE" >> $@
 	@echo "SOFTWARE." >> $@
-	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Created $@\"
+	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Created $@\" >> $(LOGFILE)
 
 REF_CALENDAR_001_create.sql: .FORCE
 	@echo "-- REF_CALENDAR_001_create.sql" > $@
@@ -631,68 +647,68 @@ REF_CALENDAR_001_create.sql: .FORCE
 	@echo "strftime('%Y-%m', d) AS year_month, " >> $@
 	@echo "strftime('%Y-%W', d) AS year_week_of_year" >> $@
 	@echo "FROM dates);" >> $@
-	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Created $@\"
+	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Created $@\" >> $(LOGFILE)
 
 er_relationships.txt: .FORCE
 	@echo "REF_CALENDAR_001 1--1 REF_CALENDAR_001" > $@
-	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Created $@\"
+	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Created $@\" >> $(LOGFILE)
 
 metric_sample_001.csv: 
 	@echo provider_code,node_code,node_qualifier,metric_code,value_dts,metric_value > $@
-	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Created $@\"	
+	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Created $@\" >> $(LOGFILE)
 
 metadata.yaml: 
-	@echo "title: $(PROJECT-NAME)" > $@
-	@echo "about: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor." >> $@
-	@echo "about_url: https://example.com/" >> $@
-	@echo "source: Building Data Products" >> $@
-	@echo "source_url: https://example.com/" >> $@
-	@echo "description_html: |-" >> $@
+	@echo "title{{colon}} $(PROJECT-NAME)" > $@
+	@echo "about{{colon}} Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor." >> $@
+	@echo "about_url{{colon}} https{{colon}}//example.com/" >> $@
+	@echo "source{{colon}} Building Data Products" >> $@
+	@echo "source_url{{colon}} https{{colon}}//example.com/" >> $@
+	@echo "description_html{{colon}} |-" >> $@
 	@echo "  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.<br>" >> $@
 	@echo "  Lorem ipsum dolor sit amet, consectetur adipiscing elit." >> $@
 	@echo "  <p></p>" >> $@
-	@echo "  <strong>Contacts:</strong><br>" >> $@
-	@echo "  Business Contact: <a href = mailto: "brian@minimumviablearchitecture.com">Brian McMillan</a><br>" >> $@
-	@echo "  Technical Contact: <a href = mailto: "me@example.com">Some Person</a>" >> $@
-	@echo "license: DbCL" >> $@
-	@echo "license_url: https://opendatacommons.org/licenses/dbcl/1-0/" >> $@
-	@echo "databases:" >> $@
-	@echo "  makefile_analytics_project:" >> $@
-	@echo "    tables:" >> $@
-	@echo "      REF_CALENDAR_001:" >> $@
-	@echo "        description: Basic date dimension table. JOIN on either the date or date_int columns." >> $@
-	@echo "        source: REF_CALENDAR_001_create.sql" >> $@
-	@echo "        about: Standard reference table with dates between 2020-01-01 and 2024-01-01" >> $@
-	@echo "        sort: date_int" >> $@
-	@echo "        columns: " >> $@
-	@echo "            date: Date in YYYY-MM-DD format." >> $@
-	@echo "            date_int: Date in YYYYMMDD format." >> $@
-	@echo "            date_julian_day: Numeric date value used to compute the differences between dates." >> $@
-	@echo "            date_end_of_year: Date at the end of the year." >> $@
-	@echo "            date_end_of_week_smtwtfs: Date at the end of the week. Assumes the week starts on a Sunday and ends on a Saturday." >> $@
-	@echo "            days_in_period_month: Number of days in this month." >> $@
-	@echo "            days_in_period_week: Number of days in this week." >> $@
-	@echo "            year: Year in YYYY format." >> $@
-	@echo "            year_month: Month in YYYY-MM format." >> $@
-	@echo "            year_week_of_year: Week of the year in YYYY-WW format." >> $@
-	@echo "      META_TABLES_001:" >> $@
-	@echo "        description: Data catalog table." >> $@
-	@echo "        source: META_TABLES_001_create" >> $@
-	@echo "        about: Standard reference table with metadata for each table in the database." >> $@
-	@echo "        columns: " >> $@
-	@echo "            table: The name of the table." >> $@
-	@echo "            column: The name of the column." >> $@
-	@echo "            total_rows: Total number of rows in the table." >> $@
-	@echo "            num_null: Count of NULL records in the column." >> $@
-	@echo "            num_blank: Count of empty records in the column." >> $@
-	@echo "            num_distinct: Count of distinct records in the column." >> $@
-	@echo "            most_common: JSON array of the most common values in the column." >> $@
-	@echo "            least_common: JSON array of the least common values in the column." >> $@
-	@echo "    queries:" >> $@
-	@echo "        end_of_period_lookup:" >> $@
-	@echo "          title: End of period date look-up" >> $@
-	@echo "          description: Look-up query to assist in aggregating data by the end of year, month, or week date." >> $@
-	@echo "          sql:  |-" >> $@
+	@echo "  <strong>Contacts{{colon}}</strong><br>" >> $@
+	@echo "  Business Contact{{colon}} <a href = mailto{{colon}} "brian@minimumviablearchitecture.com">Brian McMillan</a><br>" >> $@
+	@echo "  Technical Contact{{colon}} <a href = mailto{{colon}} "me@example.com">Some Person</a>" >> $@
+	@echo "license{{colon}} DbCL" >> $@
+	@echo "license_url{{colon}} https{{colon}}//opendatacommons.org/licenses/dbcl/1-0/" >> $@
+	@echo "databases{{colon}}" >> $@
+	@echo "  makefile_analytics_project{{colon}}" >> $@
+	@echo "    tables{{colon}}" >> $@
+	@echo "      REF_CALENDAR_001{{colon}}" >> $@
+	@echo "        description{{colon}} Basic date dimension table. JOIN on either the date or date_int columns." >> $@
+	@echo "        source{{colon}} REF_CALENDAR_001_create.sql" >> $@
+	@echo "        about{{colon}} Standard reference table with dates between 2020-01-01 and 2024-01-01" >> $@
+	@echo "        sort{{colon}} date_int" >> $@
+	@echo "        columns{{colon}} " >> $@
+	@echo "            date{{colon}} Date in YYYY-MM-DD format." >> $@
+	@echo "            date_int{{colon}} Date in YYYYMMDD format." >> $@
+	@echo "            date_julian_day{{colon}} Numeric date value used to compute the differences between dates." >> $@
+	@echo "            date_end_of_year{{colon}} Date at the end of the year." >> $@
+	@echo "            date_end_of_week_smtwtfs{{colon}} Date at the end of the week. Assumes the week starts on a Sunday and ends on a Saturday." >> $@
+	@echo "            days_in_period_month{{colon}} Number of days in this month." >> $@
+	@echo "            days_in_period_week{{colon}} Number of days in this week." >> $@
+	@echo "            year{{colon}} Year in YYYY format." >> $@
+	@echo "            year_month{{colon}} Month in YYYY-MM format." >> $@
+	@echo "            year_week_of_year{{colon}} Week of the year in YYYY-WW format." >> $@
+	@echo "      META_TABLES_001{{colon}}" >> $@
+	@echo "        description{{colon}} Data catalog table." >> $@
+	@echo "        source{{colon}} META_TABLES_001_create" >> $@
+	@echo "        about{{colon}} Standard reference table with metadata for each table in the database." >> $@
+	@echo "        columns{{colon}} " >> $@
+	@echo "            table{{colon}} The name of the table." >> $@
+	@echo "            column{{colon}} The name of the column." >> $@
+	@echo "            total_rows{{colon}} Total number of rows in the table." >> $@
+	@echo "            num_null{{colon}} Count of NULL records in the column." >> $@
+	@echo "            num_blank{{colon}} Count of empty records in the column." >> $@
+	@echo "            num_distinct{{colon}} Count of distinct records in the column." >> $@
+	@echo "            most_common{{colon}} JSON array of the most common values in the column." >> $@
+	@echo "            least_common{{colon}} JSON array of the least common values in the column." >> $@
+	@echo "    queries{{colon}}" >> $@
+	@echo "        end_of_period_lookup{{colon}}" >> $@
+	@echo "          title{{colon}} End of period date look-up" >> $@
+	@echo "          description{{colon}} Look-up query to assist in aggregating data by the end of year, month, or week date." >> $@
+	@echo "          sql{{colon}}  |-" >> $@
 	@echo "            SELECT" >> $@
 	@echo "              date," >> $@
 	@echo "              date_end_of_week_smtwtfs AS date_end_of_week," >> $@
@@ -702,6 +718,9 @@ metadata.yaml:
 	@echo "              REF_CALENDAR_001" >> $@
 	@echo "            ORDER BY" >> $@
 	@echo "              date_int ASC" >> $@
+	@sed -i -e 's/{{colon}}/:/g' $@
+	@rm -f $@-e
+	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Created $@\" >> $(LOGFILE)
 
 ############################################################################
 # Configure Database                                                       #

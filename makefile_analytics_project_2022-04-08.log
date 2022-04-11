@@ -1,0 +1,8 @@
+2022-04-08T23:46:16Z [INFO] record_count-REF_CALENDAR_001.csv "Record count in makefile_analytics_project.db.REF_CALENDAR_001 - 1462"
+2022-04-08T23:48:10Z [FAIL] field_count_check-metric_sample_001.csv "Expected fields not equal to 7"
+2022-04-08T23:49:02Z [INFO] create-database "Created database in WAL mode - makefile_analytics_project.db"
+2022-04-08T23:49:02Z [INFO] create-REF_CALENDAR_001 "Executed REF_CALENDAR_001_create.sql on makefile_analytics_project.db"
+2022-04-08T23:49:02Z [INFO] metric-REF_CALENDAR_001 "1462 records in makefile_analytics_project.db.REF_CALENDAR_001"
+2022-04-08T23:49:02Z [INFO] META_TABLES_001 "11 records in makefile_analytics_project.db.META_TABLES_001"
+2022-04-08T23:49:03Z [INFO] database_schema.png "Executed er-digram and exported to database_schema.png"
+2022-04-08T23:49:04Z [INFO] database_schema.er "Executed er-digram and exported to database_schema.er"

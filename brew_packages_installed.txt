@@ -12,7 +12,7 @@ fontconfig 2.14.0
 freetype 2.12.0
 fribidi 1.0.11
 gawk 5.1.1
-gd 2.3.3_1
+gd 2.3.3_2
 gdbm 1.23
 gdk-pixbuf 2.42.8
 gettext 0.21
@@ -35,7 +35,7 @@ jbig2dec 0.19
 jpeg 9e
 jpeg-xl 0.6.1
 jq 1.6
-libavif 0.9.3
+libavif 0.10.0
 libde265 1.0.8
 libffi 3.4.2
 libheif 1.12.0_1
@@ -48,7 +48,7 @@ librsvg 2.52.8
 libtiff 4.3.0
 libtool 2.4.7
 libvmaf 2.3.0_1
-libx11 1.7.3.1
+libx11 1.7.5
 libxau 1.0.9
 libxcb 1.14_2
 libxdmcp 1.1.3

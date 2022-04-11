@@ -13,10 +13,14 @@
 ├── makefile_analytics_project.db
 ├── makefile_analytics_project.db-shm
 ├── makefile_analytics_project.db-wal
+├── makefile_analytics_project.db.bak
+├── makefile_analytics_project.log
+├── makefile_analytics_project_2022-04-08.log
 ├── makefile_graph.png
 ├── makefile_graph.txt
+├── metadata.yaml
 ├── metric_sample_001.csv
 ├── requirements.txt
 └── requirements_base.txt
 
-0 directories, 19 files
+0 directories, 23 files
