@@ -1,5 +1,5 @@
 # MIT License
-Copyright (c) 2022 brian mcmillan - brian[at]minimumviablearchitecture[dot]com
+Copyright (c) 2022 Brian McMillan Brian McMillan
  
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the Software), to deal

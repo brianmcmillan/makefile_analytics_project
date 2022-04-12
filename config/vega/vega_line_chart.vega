@@ -1,0 +1,6 @@
+  mark: line,
+  encoding: {
+    x: {field: end_of_week_ssmtwtf, type: temporal, bin: false},
+    y: {field: total_sales_revenue, type: quantitative, bin: false},
+    tooltip: {field: _tooltip_summary, type: ordinal}
+  }

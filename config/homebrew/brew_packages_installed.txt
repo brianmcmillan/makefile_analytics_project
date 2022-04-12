@@ -18,7 +18,7 @@ gdk-pixbuf 2.42.8
 gettext 0.21
 ghostscript 9.55.0
 giflib 5.2.1
-git 2.35.1
+git 2.35.2
 glib 2.72.0
 gmp 6.2.1_1
 gnu-getopt 2.37.4
@@ -47,7 +47,7 @@ libpthread-stubs 0.4
 librsvg 2.52.8
 libtiff 4.3.0
 libtool 2.4.7
-libvmaf 2.3.0_1
+libvmaf 2.3.1
 libx11 1.7.5
 libxau 1.0.9
 libxcb 1.14_2
@@ -62,7 +62,7 @@ mpdecimal 2.5.1
 mpfr 4.1.0
 netpbm 10.86.32
 oniguruma 6.9.7.1
-openexr 3.1.4
+openexr 3.1.5
 openjpeg 2.4.0
 openssl@1.1 1.1.1n
 openssl@3 3.0.2

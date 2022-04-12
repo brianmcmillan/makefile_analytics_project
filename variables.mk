@@ -40,6 +40,7 @@ UNIT-TESTSDIR := $(PROJECT-PATH)/test/unit_tests/mocks
 INTEGRATION-TESTSDIR := $(PROJECT-PATH)/test/integration_test
 
 # Configuration
+BREW-CONFIGDIR := $(PROJECT-PATH)/config/homebrew
 PYTHON-CONFIGDIR := $(PROJECT-PATH)/config/python
 APPSERVER-CONFIGDIR := $(PROJECT-PATH)/config/datasette
 VIZSERVER-CONFIGDIR := $(PROJECT-PATH)/config/vega

@@ -20,7 +20,15 @@ define test-dependent-file
 	@# tests the file in the <first dependency>
 	@[[ -f $< ]] \
 	&& true \
-	|| echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [WARNING]    $@     \"testing for $< did not find $<\" >> $(LOGFILE) 
+	|| echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [WARNING]    $@     \"testing for $< did not find $<\" >> $(LOGFILE)
+endef
+
+define test-dir
+	@# tests the directory in the <dependency>
+	@#<target>(colon)(space)<path/to/directory>
+	@[[ -d $< ]] \
+	&& true \
+	|| echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [FAIL]    $@    \"testing for $< did not find $?\" >> $(LOGFILE)
 endef
 
 define uninstall-file
@@ -99,20 +107,20 @@ define metric-record_count
 endef	
 
 define update-homebrew
-	@#update-homebrew{{colon}}{{space}}
+	@#update-homebrew{{colon}}{{space}}<path/to/brew_packages_base.txt>
 	@$(BREW) update
 	@$(BREW) upgrade
 	@$(BREW) install $(HOMEBREW-PACKAGES)
-	@(echo "$(HOMEBREW-PACKAGES)" | sed -e 's/ /\n/g') > brew_packages_base.txt
-	$(BREW) list --versions > brew_packages_installed.txt
+	@(echo "$(HOMEBREW-PACKAGES)" | sed -e 's/ /\n/g') > $<
+	$(BREW) list --versions > config/homebrew/brew_packages_installed.txt
 	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Homebrew software updated\" >> $(LOGFILE)
 endef
 
 define update-pip-packages
-	@#update-pip-packages{{colon}}{{space}}requirements_base.txt
+	@#update-pip-packages{{colon}}{{space}}<path/to/requirements_base.txt>
 	@$(shell pyenv which pip) install --upgrade pip
 	@$(shell pyenv which pip) install -r $<
-	@$(shell pyenv which pip) freeze > requirements.txt
+	@$(shell pyenv which pip) freeze > config/python/requirements.txt
 	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Python pip packages upgraded - requirements.txt\" >> $(LOGFILE)
 endef
 
@@ -131,7 +139,7 @@ define install-pip-packages
 endef
 
 define freeze-pip
-	@#requirements.txt{{colon}}{{space}}requirements_base.txt
+	@#<path/to/requirements.txt>{{colon}}{{space}}
 	@$(shell pyenv which pip) freeze > $@
 	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Python pip packages installed - requirements.txt\" >> $(LOGFILE)
 endef
@@ -147,13 +155,13 @@ define install-python-local-virtualenv
 endef
 
 define list-brew-packages
-	@#brew_packages_installed.txt{{colon}}{{space}}brew_packages_base.txt .FORCE
+	@#<path/to/brew_packages_installed.txt>{{colon}}{{space}}<path/to/brew_packages_base.txt> .FORCE
 	@$(BREW) list --versions > $@
 	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Created $@\" >> $(LOGFILE)
 endef
 
 define base-brew-package-list
-	@#brew_packages_base.txt{{colon}}{{space}}.FORCE
+	@#<<path/to/brew_packages_base.txt>{{colon}}{{space}}.FORCE
 	@(echo "$(HOMEBREW-PACKAGES)" | sed -e 's/ /\n/g') > $@
 	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Created $@\"  >> $(LOGFILE)
 endef	
