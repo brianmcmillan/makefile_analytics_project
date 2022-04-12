@@ -5,14 +5,18 @@
 ├── REF_CALENDAR_001_create.sql
 ├── brew_packages_base.txt
 ├── brew_packages_installed.txt
+├── config
+│   └── make
+│       ├── macros.mk
+│       └── variables.mk
 ├── database_schema.er
 ├── database_schema.png
 ├── directory_listing.txt
 ├── er_relationships.txt
+├── log
+│   └── makefile_analytics_project.log
 ├── makefile
 ├── makefile_analytics_project.db
-├── makefile_analytics_project.db-shm
-├── makefile_analytics_project.db-wal
 ├── makefile_analytics_project.db.bak
 ├── makefile_analytics_project.log
 ├── makefile_analytics_project_2022-04-08.log
@@ -23,4 +27,4 @@
 ├── requirements.txt
 └── requirements_base.txt
 
-0 directories, 23 files
+3 directories, 24 files
