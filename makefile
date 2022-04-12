@@ -277,13 +277,77 @@ ERALCHEMY := $(PYENVDIR)/eralchemy
 DATASETTE := $(PYENVDIR)/datasette
 
 # Project directory structure
-LOGFILE := $(PROJECT-PATH)/$(PROJECT-NAME).log
+# Temporary application files
+TEMPSTATEDIR := $(PROJECT-PATH)/tmp
+PROJECTLOGDIR := $(PROJECT-PATH)/log
+LOGFILE := $(PROJECTLOGDIR)/$(PROJECT-NAME).log
+
+# Source code and templates
+SQLITE-SRCDIR := $(PROJECT-PATH)/src/sqlite3
+TEMPLATE-FILEDIR := $(PROJECT-PATH)/src/templates
+
+# Tests
+UNIT-TESTSDIR := $(PROJECT-PATH)/test/unit_tests/mocks
+INTEGRATION-TESTSDIR := $(PROJECT-PATH)/test/integration_test
+
+# Configuration
+PYTHON-CONFIGDIR := $(PROJECT-PATH)/config/python
+APPSERVER-CONFIGDIR := $(PROJECT-PATH)/config/datasette
+VIZSERVER-CONFIGDIR := $(PROJECT-PATH)/config/vega
+SCHEDULE-CONFIGDIR := $(PROJECT-PATH)/config/cron
+DATA_SOURCE-CONFIGDIR := $(PROJECT-PATH)/config/data_sources
+SEED_DATA-CONFIGDIR := $(PROJECT-PATH)/config/seed_data
+SQL_DLL-CONFIGDIR := $(PROJECT-PATH)/config/sql_ddl
+SQL_DML-CONFIGDIR := $(PROJECT-PATH)/config/sql_dml
+
+# Documentation
+TUTORIAL-FILEDIR := $(PROJECT-PATH)/doc/tutorial
+HOWTO-FILEDIR := $(PROJECT-PATH)/doc/howto
+REFERENCE-FILEDIR := $(PROJECT-PATH)/doc/reference
+DISCUSSION-FILEDIR := $(PROJECT-PATH)/doc/discussion
+
+# Application build files
+METRICS-FILEDIR := $(PROJECT-PATH)/build/load/metric
+LOG-FILEDIR := $(PROJECT-PATH)/build/load/log
+ERROR-FILEDIR := $(PROJECT-PATH)/build/load/error
+STATIC-FILEDIR := $(PROJECT-PATH)/build/static
+METADATA-FILEDIR := $(PROJECT-PATH)/build/metadata
+DATABASE-FILEDIR := $(PROJECT-PATH)/build/db
+SQL_DQL-FILEDIR := $(PROJECT-PATH)/build/adhoc_sql
+
+# Deployment artifacts
+LOCAL-DEPLOYMENTDIR := $(PROJECT-PATH)/deploy/local/static
+CLOUDRUN-DEPLOYMENTDIR := $(PROJECT-PATH)/deploy/cloudrun/static
+SQLITE3-DEPLOYMENTDIR := $(PROJECT-PATH)/deploy/sqlite3
+
+
 
 
 #######################################
 all: installcheck initial-documentation ## Executes the default make task.
 
 .FORCE: 
+
+foo:
+	echo $(LOGFILE)
+
+
+installdirs: ## Creates the project directories.
+	@mkdir -p $(PROJECTLOGDIR) $(TEMPSTATEDIR) \
+	$(SQLITE-SRCDIR) $(TEMPLATE-FILEDIR) $(UNIT-TESTSDIR) $(INTEGRATION-TESTSDIR) \
+	$(PYTHON-CONFIGDIR) $(APPSERVER-CONFIGDIR) $(VIZSERVER-CONFIGDIR) $(SCHEDULE-CONFIGDIR) \
+	$(DATA_SOURCE-CONFIGDIR) $(SEED_DATA-CONFIGDIR) $(SQL_DLL-CONFIGDIR) $(SQL_DML-CONFIGDIR) \
+	$(TUTORIAL-FILEDIR) $(HOWTO-FILEDIR) $(REFERENCE-FILEDIR) $(DISCUSSION-FILEDIR) \
+	$(METRICS-FILEDIR) $(LOG-FILEDIR) $(ERROR-FILEDIR) $(STATIC-FILEDIR) $(METADATA-FILEDIR) \
+	$(DATABASE-FILEDIR) $(SQL_DQL-FILEDIR) \
+	$(LOCAL-DEPLOYMENTDIR) $(CLOUDRUN-DEPLOYMENTDIR) $(SQLITE3-DEPLOYMENTDIR)
+	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Executed $@\" >> $(LOGFILE)
+
+
+
+
+
+
 
 # .PHONY: all help documentation initial-documentation list-variables \
 # installcheck check test-gitignore test-README.md test-brew_packages_base.txt test-brew_packages_installed.txt install \
@@ -575,7 +639,7 @@ README-TEMPLATE.md: LICENSE.md
 
 LICENSE.md:
 	@echo "# MIT License" >> $@
-	@echo "Copyright (c) $(shell date -u +"%Y") $(PROJECT-CONTACT)" >> $@
+	@echo "Copyright (c) $(shell date -u +"%Y") $(BUSINESS-CONTACT-NAME) $(BUSINESS-CONTACT-NAME)" >> $@
 	@echo " " >> $@
 	@echo "Permission is hereby granted, free of charge, to any person obtaining a copy" >> $@
 	@echo "of this software and associated documentation files (the "Software"), to deal" >> $@
@@ -774,16 +838,16 @@ regex_check-metric_sample_001.csv-C3: metric_sample_001.csv
 # Deployment                                                               #
 ############################################################################
 
-# build/local: svc/db/online_retail.db
+# build/local: build/db/online_retail.db
 # 	@echo $(DTS)     [INFO] - Executing $@
-# 	@mkdir -p opt/$(notdir $@)/static
-# 	@cp -f etc/app/metadata.yaml opt/local/metadata.yaml
-# 	@cp -f etc/server/requirements.txt opt/local/requirements.txt
-# 	@cp -f etc/server/settings.txt opt/local/settings.txt
-# 	@cp -f $< opt/local/$(<F)
+# 	@mkdir -p deploy/$(notdir $@)/static
+# 	@cp -f config/app/metadata.yaml deploy/local/metadata.yaml
+# 	@cp -f config/server/requirements.txt deploy/local/requirements.txt
+# 	@cp -f config/server/settings.txt deploy/local/settings.txt
+# 	@cp -f $< deploy/local/$(<F)
 
 deploy-local: test-metadata.yaml test-database
 	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Starting server on http://$(strip $(LOCAL_ADDRESS)):$(LOCAL_PORT)\"
 	$(DATASETTE) $(DATABASE-PATH) --host $(LOCAL_ADDRESS) --port $(LOCAL_PORT) --metadata metadata.yaml -o
-#	@$(DATASETTE) serve opt/local/ --host $(LOCAL_ADDRESS) --port $(LOCAL_PORT) -o
+#	@$(DATASETTE) serve deploy/local/ --host $(LOCAL_ADDRESS) --port $(LOCAL_PORT) -o
 	
