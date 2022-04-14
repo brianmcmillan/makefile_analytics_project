@@ -1,5 +1,0 @@
-<table 1> 1--1 <table 2>
-1 - Exactly one
-? - 0 or 1
-* - 0 or more
-+ - 1 or more

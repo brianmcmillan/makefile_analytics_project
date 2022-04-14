@@ -5,7 +5,7 @@
 create-templates: src/templates/README-TEMPLATE.md src/templates/LICENSE.md \
 src/templates/AUTHORS.md src/templates/CHANGELOG.md src/templates/NEWS.md \
 config/cron/crontab.txt config/datasette/requirements.txt config/datasette/metadata.yaml \
-config/datasette/datasette_settings.txt src/templates/header.sql config/sql_ddl/er_relationships.txt \
+config/datasette/datasette_settings.txt src/templates/header.sql src/templates/er_relationships.txt \
 config/vega/vega_embed_header.viz config/vega/vega_embed_footer.viz config/vega/vega_bar_chart.vega \
 config/vega/vega_line_chart.vega config/vega/vega_scatter_chart.vega
 
@@ -239,7 +239,7 @@ src/templates/header.sql:
 	@echo "-------------------------------------------------------------------------------" >> $@
 	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Created $@\" >> $(LOGFILE)
 
-config/sql_ddl/er_relationships_TEMPLATE.txt:
+src/templates/er_relationships.txt:
 	@echo "<table 1> 1--1 <table 2>" > $@
 	@echo "1 - Exactly one" >> $@
 	@echo "? - 0 or 1" >> $@
