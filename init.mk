@@ -159,6 +159,9 @@ uninstall-init-files: FILES=.gitignore README-TEMPLATE.md config/homebrew/* conf
 uninstall-init-files: 
 	$(uninstall-file-list)
 
+uninstall-virtualenv: 
+	$(uninstall-virtualenv)
+	
 # WARNING: Uninstalling Homebrew *WILL* affect outher applications
 # uninstall-homebrew: .FORCE
 # 	@/bin/bash -c "$$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/uninstall.sh)"

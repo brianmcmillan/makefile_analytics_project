@@ -239,7 +239,7 @@ src/templates/header.sql:
 	@echo "-------------------------------------------------------------------------------" >> $@
 	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Created $@\" >> $(LOGFILE)
 
-config/sql_ddl/er_relationships.txt:
+config/sql_ddl/er_relationships_TEMPLATE.txt:
 	@echo "<table 1> 1--1 <table 2>" > $@
 	@echo "1 - Exactly one" >> $@
 	@echo "? - 0 or 1" >> $@
