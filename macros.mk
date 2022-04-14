@@ -92,10 +92,10 @@ endef
 define er-diagram
 	@#<path/to/diagram.type>{{colon}}{{space}}<path/to/er_relationships.txt>"
 	@#Types can be er, pdf, png, dot
-	@$(ERALCHEMY) -i sqlite:///$(DATABASE-PATH) -o $(subst .,,$(notdir $(DATABASE-PATH))).er
-	@cat $(subst .,,$(notdir $(DATABASE-PATH))).er $< > $(subst .,,$(notdir $(DATABASE-PATH)))_2.er || true
-	@$(ERALCHEMY) -i $(subst .,,$(notdir $(DATABASE-PATH)))_2.er -o $@
-	@rm -f $(subst .,,$(notdir $(DATABASE-PATH)))*.er
+	@$(ERALCHEMY) -i sqlite:///$(DATABASE-PATH) -o tmp/$(subst .,,$(notdir $(DATABASE-PATH))).er
+	@cat tmp/$(subst .,,$(notdir $(DATABASE-PATH))).er $< > tmp/$(subst .,,$(notdir $(DATABASE-PATH)))_2.er || true
+	@$(ERALCHEMY) -i tmp/$(subst .,,$(notdir $(DATABASE-PATH)))_2.er -o $@
+	@rm -f tmp/$(subst .,,$(notdir $(DATABASE-PATH)))*.er
 	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Executed er-digram and exported to $@\" >> $(LOGFILE)
 endef
 

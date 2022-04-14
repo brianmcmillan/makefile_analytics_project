@@ -32,13 +32,12 @@ BUSINESS-CONTACT-EMAIL := "brian@minimumviablearchitecture.com"
 TECHNICAL-CONTACT-NAME := "Some Person"
 TECHNICAL-CONTACT-EMAIL := "me@example.com"
 
-
 # Deployment variables
 LOCAL_ADDRESS := $(shell ipconfig getifaddr en0) #192.168.1.251
 LOCAL_PORT := 8001
 
-#######################################
-all: installcheck initial-documentation ## Executes the default make task.
+############################################################################
+all: initial-documentation ## Executes the default make task.
 
 .FORCE: 
 
@@ -47,33 +46,35 @@ all: installcheck initial-documentation ## Executes the default make task.
 foo:
 	echo $(LOGFILE)
 
-
-
 ############################################################################
 # Documentation                                                            #
 ############################################################################
-documentation: test-makefile_graph.png test-directory_listing.txt test-database_schema.png test-database_schema.er ## Builds the documentation files for the build. (e.g. schema docs, data flow diagrams)
+documentation: build/metadata/makefile_graph.png build/metadata/database_schema.png build/metadata/database_schema.er build/metadata/directory_listing.txt  ## Builds the documentation files for the build. (e.g. schema docs, data flow diagrams)
 
-initial-documentation: test-directory_listing.txt help
+initial-documentation: build/metadata/directory_listing.txt help
 
 help: ## List of all makefile tasks.
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(word 1, $(MAKEFILE_LIST)) | sort | \
 	awk 'BEGIN {FS = ":.*?## "};\
 	{printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}' 
 
-directory_listing.txt: .FORCE
+build/metadata/directory_listing.txt: .FORCE
 	$(directory-listing)
 
-makefile_graph.png: .FORCE
+build/metadata/makefile_graph.png: .FORCE
 	$(makefile-graph)
 
-database_schema.png: er_relationships.txt .FORCE
+build/metadata/er_relationships.txt: 
+	@echo "REF_CALENDAR_001 1--1 REF_CALENDAR_001" > $@
+	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Created $@\" >> $(LOGFILE)
+
+build/metadata/database_schema.png: build/metadata/er_relationships.txt .FORCE
 	$(er-diagram)
 
-database_schema.er: er_relationships.txt .FORCE
+build/metadata/database_schema.er: build/metadata/er_relationships.txt .FORCE
 	$(er-diagram)
 
-META_TABLES_001: .FORCE
+build/metadata/META_TABLES_001: .FORCE
 	$(metadata-tables)
 
 list-variables: 
@@ -96,7 +97,20 @@ check-documentation: test-makefile_graph.png test-makefile_graph.txt test-direct
 # check-database: test-database test-database_schema.png test-database_schema.er \
 # test-REF_CALENDAR_001 test-META_TABLES_001
 
-check-load-files: test-metric_sample_001.csv
+#check-load-files: test-metric_sample_001.csv
+
+# test-makefile_graph.png: build/metadata/makefile_graph.png
+# 	$(test-dependent-file)
+
+# test-makefile_graph.txt: makefile_graph.txt
+# 	$(test-dependent-file)
+
+# test-database_schema.png: database_schema.png
+# 	$(test-dependent-file)
+
+# test-database_schema.er: database_schema.er
+# 	$(test-dependent-file)
+
 
 
 # test-gitignore: .gitignore
@@ -129,17 +143,7 @@ check-load-files: test-metric_sample_001.csv
 # test-requirements_base.txt: requirements_base.txt
 # 	$(test-dependent-file)
 
-test-makefile_graph.png: makefile_graph.png
-	$(test-dependent-file)
 
-test-makefile_graph.txt: makefile_graph.txt
-	$(test-dependent-file)
-
-test-database_schema.png: database_schema.png
-	$(test-dependent-file)
-
-test-database_schema.er: database_schema.er
-	$(test-dependent-file)
 
 #------------------------------------------------
 # test-database: create-database
