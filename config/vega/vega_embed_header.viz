@@ -20,5 +20,5 @@
 	    <script>
 	      // Assign the specification to a local variable vlSpec.
 	      var vlSpec = {
-	        chema: 'https://vega.github.io/schema/vega-lite/v4.json',
+	        schema: 'https://vega.github.io/schema/vega-lite/v4.json',
 	<!-- Embed Vega-Lite Definition Here -->

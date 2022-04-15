@@ -16,9 +16,9 @@ gd 2.3.3_2
 gdbm 1.23
 gdk-pixbuf 2.42.8
 gettext 0.21
-ghostscript 9.55.0
+ghostscript 9.56.1
 giflib 5.2.1
-git 2.35.2
+git 2.35.3
 glib 2.72.0
 gmp 6.2.1_1
 gnu-getopt 2.37.4
@@ -28,14 +28,14 @@ graphviz 3.0.0
 gts 0.7.6_2
 harfbuzz 4.2.0
 icu4c 70.1
-imagemagick 7.1.0-29
+imagemagick 7.1.0-29_1
 imath 3.1.4
 jasper 3.0.3
 jbig2dec 0.19
 jpeg 9e
 jpeg-xl 0.6.1
 jq 1.6
-libavif 0.10.0
+libavif 0.10.1
 libde265 1.0.8
 libffi 3.4.2
 libheif 1.12.0_1
@@ -44,6 +44,7 @@ liblqr 0.4.2_1
 libomp 14.0.0
 libpng 1.6.37
 libpthread-stubs 0.4
+libraw 0.20.2_1
 librsvg 2.52.8
 libtiff 4.3.0
 libtool 2.4.7

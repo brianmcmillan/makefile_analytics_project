@@ -38,7 +38,7 @@ define uninstall-file
 endef
 
 define uninstall-file-list
-	@#<target>{{colon}}{{space}}FILE=<list of file(s)>
+	@#<target>{{colon}}{{space}}FILES=<list of file(s)>
 	@#<target>{{colon}}{{space}}
 	@rm -f $(FILES)
 	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@     \"Files removed - $(FILES)\" >> $(LOGFILE)
@@ -53,7 +53,7 @@ endef
 define makefile-graph
 	@$(NODEGRAPH) --direction LR | $(GRAPHVIZDOT) -Tpng > $(basename $@).png
 	@$(NODEGRAPH) --direction LR | $(GRAPHVIZDOT) -Tplain > $(basename $@).txt
-	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Created makefile diagram at $@\" >> $(LOGFILE)
+	@#echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Created makefile diagram at $@\" >> $(LOGFILE)
 endef
 
 define create-database

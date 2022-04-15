@@ -1,5 +1,4 @@
 .
-├── README-TEMPLATE.md
 ├── README.md
 ├── build
 │   └── metadata
@@ -8,7 +7,8 @@
 │       ├── directory_listing.txt
 │       ├── er_relationships.txt
 │       ├── makefile_graph.png
-│       └── makefile_graph.txt
+│       ├── makefile_graph.txt
+│       └── metadata.yaml
 ├── config
 │   ├── cron
 │   │   └── crontab.txt
@@ -45,8 +45,9 @@
 │       ├── NEWS.md
 │       ├── README-TEMPLATE.md
 │       ├── er_relationships.txt
-│       └── header.sql
+│       ├── header.sql
+│       └── metadata.yaml
 ├── templates.mk
 └── variables.mk
 
-11 directories, 38 files
+11 directories, 39 files
