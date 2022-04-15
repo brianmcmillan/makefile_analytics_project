@@ -2,12 +2,14 @@
 ############################################################################
 # Project templates                                                        #
 ############################################################################
+#install-templates: create-templates
 create-templates: src/templates/README-TEMPLATE.md src/templates/LICENSE.md \
 src/templates/AUTHORS.md src/templates/CHANGELOG.md src/templates/NEWS.md \
 config/cron/crontab.txt config/datasette/requirements.txt src/templates/metadata.yaml \
 config/datasette/datasette_settings.txt src/templates/header.sql src/templates/er_relationships.txt \
 config/vega/vega_embed_header.viz config/vega/vega_embed_footer.viz config/vega/vega_bar_chart.vega \
-config/vega/vega_line_chart.vega config/vega/vega_scatter_chart.vega
+config/vega/vega_line_chart.vega config/vega/vega_scatter_chart.vega \
+build/metadata/makefile_graph.png build/metadata/directory_listing.txt
 
 src/templates/README-TEMPLATE.md: 
 	@echo "# $(PROJECT-NAME)" > $@

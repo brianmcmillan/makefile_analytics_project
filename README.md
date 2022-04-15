@@ -152,6 +152,67 @@ datasette-vega==0.6.2
 datasette-yaml==0.1.1
 ```
 
+### Install the project templates
+Now that the basic project structure and software has been established, the next step is to install a set of template files we will need. These files will change over time and as the team needs change, update the `templates.mk` file to make it easy to work with a common set of documents and code templates.
+
+Run: `make install-templates`
+
+#### Results
+The following directories and files are created after `make install-templates` is run.
+These files are only written one time and as they are needed, they should be copied from the `src/templates/` directory.
+
+```text
+.
+├── README.md
+├── build
+│   └── metadata
+│       ├── directory_listing.txt
+│       ├── makefile_graph.png
+│       └── makefile_graph.txt
+├── config
+│   ├── cron
+│   │   └── crontab.txt
+│   ├── datasette
+│   │   ├── datasette_settings.txt
+│   │   └── requirements.txt
+│   ├── homebrew
+│   │   ├── brew_packages_base.txt
+│   │   └── brew_packages_installed.txt
+│   ├── python
+│   │   ├── requirements.txt
+│   │   └── requirements_base.txt
+│   └── vega
+│       ├── vega_bar_chart.vega
+│       ├── vega_embed_footer.viz
+│       ├── vega_embed_header.viz
+│       ├── vega_line_chart.vega
+│       └── vega_scatter_chart.vega
+├── init_database.mk
+├── init_project.mk
+├── log
+│   └── makefile_analytics_project.log
+├── macros.mk
+├── makefile
+├── readme_files
+│   ├── install_directory_listing.txt
+│   └── install_makefile_graph.png
+├── src
+│   └── templates
+│       ├── AUTHORS.md
+│       ├── CHANGELOG.md
+│       ├── LICENSE.md
+│       ├── NEWS.md
+│       ├── README-TEMPLATE.md
+│       ├── er_relationships.txt
+│       ├── header.sql
+│       └── metadata.yaml
+├── templates.mk
+└── variables.mk
+```
+The makefile (`init_project.mk`) is executing the following tasks:  
+![templates.mk](readme_files/templates_makefile_graph.png)
+
+
 ----
 
 ## Support

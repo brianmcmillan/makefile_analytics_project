@@ -19,8 +19,8 @@
 
 include macros.mk
 include variables.mk
-include init_project.mk
-# include templates.mk
+#include init_project.mk
+include templates.mk
 # include init_database.mk
 
 ############################################################################
@@ -40,6 +40,7 @@ LOCAL_PORT := 8001
 all: initial-documentation ## Executes the default make task.
 install: update init-install init-documentation git-init ## Run once when setting up a new project.
 update: update-macos update-homebrew update-pip-packages ## Updates base software (OS, Homebrew, python, pip)
+install-templates: create-templates ## Installs the project template files.
 
 .FORCE: 
 
