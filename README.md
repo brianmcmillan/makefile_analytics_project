@@ -74,8 +74,8 @@ These files are regenerated each time the project is updated in order to ensure 
 └── variables.mk
 ```
 
-The makefile (`init_project.mk`) is executing the following tasks:
-![init_project.mk] (readme_files/install_makefile_graph.png)
+The makefile (`init_project.mk`) is executing the following tasks:  
+![init_project.mk](readme_files/install_makefile_graph.png)
 
 These files are stored in the `build/metadata/` directory. The configuration data for the Homebrew packages installed system-wide and the python pip packages are stored under the `config/` directory.
 
