@@ -2,9 +2,9 @@
 ############################################################################
 # Project initiation                                                       #
 ############################################################################
-install: update init-install init-documentation git-init ## Run once when setting up a new project.
+# install: update init-install init-documentation git-init ## Run once when setting up a new project.
 
-update: update-macos update-homebrew update-pip-packages ## Updates base software (OS, Homebrew, python, pip)
+# update: update-macos update-homebrew update-pip-packages ## Updates base software (OS, Homebrew, python, pip)
 
 # [WARNING] This will remove all project files and directories.
 uninstall-init: uninstalldirs-init uninstall-init-files

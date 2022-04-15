@@ -28,12 +28,8 @@ In general, this could be used as a start for any Python basic project. Specific
 
 ```makefile
 all                  Executes the default make task.
-check                Executes all test suites.
-documentation        Builds the documentation files for the build. (e.g. schema docs, data flow diagrams)
 help                 List of all makefile tasks.
-install              Run once when setting up a new system.
-installcheck         Run the pre-installation test suite.
-uninstall            Uninstalls the project files.
+install              Run once when setting up a new project.
 update               Updates base software (OS, Homebrew, python, pip)
 ```
  
@@ -47,35 +43,43 @@ This will:
 - Downloads and installs a couple `pip` packages to automate the creation of a picture of the pipeline steps.
 - Creates some basic documentation of the project.
 - Initializes a local git repository with the name of the project. 
- 
-### Updating the software
-Run: `make update`
 
-This will:
-- Update macOS.
-- Update Homebrew. If the list of applications changes in the `HOMEBREW-PACKAGES` variable, these will be installed.
-- Updates the `pip` packages defined in the `requirements_base.txt:` task.
-- Updates the documentation of the project.
- 
-## Images
-makefile_pipeline.png:
-![Makefile pipeline](makefile_graph.png)
+#### Results
+The following directories and files are created after `make install` is run.
+These files are regenerated each time the project is updated in order to ensure the system configuration documentation stays up to date.
 
-directory_listing.txt:
-```
+```text
 .
+├── README-TEMPLATE.md
 ├── README.md
-├── brew_packages_base.txt
-├── brew_packages_installed.txt
-├── directory_listing.txt
+├── build
+│   └── metadata
+│       ├── directory_listing.txt
+│       ├── makefile_graph.png
+│       └── makefile_graph.txt
+├── config
+│   ├── homebrew
+│   │   ├── brew_packages_base.txt
+│   │   └── brew_packages_installed.txt
+│   └── python
+│       ├── requirements.txt
+│       └── requirements_base.txt
+├── init_database.mk
+├── init_project.mk
+├── log
+│   └── makefile_analytics_project.log
+├── macros.mk
 ├── makefile
-├── makefile_graph.png
-├── requirements.txt
-└── requirements_base.txt
-
-0 directories, 8 files
+├── templates.mk
+└── variables.mk
 ```
-brew_packages_base.txt:
+
+The makefile (`init_project.mk`) is executing the following tasks:
+![init_project.mk] (readme_files/install_makefile_graph.png)
+
+These files are stored in the `build/metadata/` directory. The configuration data for the Homebrew packages installed system-wide and the python pip packages are stored under the `config/` directory.
+
+**brew_packages_base.txt:**
 ```text
 coreutils
 zlib
@@ -91,7 +95,7 @@ makefile2graph
 graphviz
 ```
 
-brew_packages_installed.txt:
+**brew_packages_installed.txt:**
 ```text
 aom 3.3.0
 aspell 0.60.8
@@ -102,24 +106,58 @@ xz 5.2.5
 zlib 1.2.11
 ```
 
-(pip) requirements_base:
-```
+**requirements_base.txt:**
+```text
 makefile2dot==1.0.2
 pygraphviz==1.9
+sqlite-utils==3.22.1
+ERAlchemy==1.2.10
+SQLAlchemy==1.3.24
+datasette==0.61.1
+datasette-copyable==0.3.1
+datasette-vega==0.6.2
+datasette-yaml==0.1.1
 ```
 
-(pip) requirements.txt:
+**requirements.txt:**
+```text
+aiofiles==0.8.0
+anyio==3.5.0
+asgi-csrf==0.9
+...
+tabulate==0.8.9
+typing_extensions==4.1.1
+uvicorn==0.17.6
 ```
-graphviz==0.19.1
-makefile2dot==1.0.2
-pygraphviz==1.9
+
+### Updating the software
+Run: `make update`
+
+This will:
+- Update macOS.
+- Update Homebrew. If the list of applications changes in the `HOMEBREW-PACKAGES` variable, these will be installed.
+- Updates the `pip` packages defined in the `requirements_base.txt:` task.
+- Updates the documentation of the project.
+
+One important thing to note is that the instalation of the `pip` packages is managed through the `init_project` makefile and the `config/python/requirements_base.txt:` target. Do not edit the `requirements.txt` file directly. Another thing to note is that the software versions are explicitely set. This will minimize the likelihood that you will have conflicting versions of the packages at the time they were defined. Periodically, you will want to upgrade the packages and add new ones and that should also be done through the makefile target. 
+
+**requirements_base.txt:**
+```text
+...
+ERAlchemy==1.2.10
+SQLAlchemy==1.3.24
+datasette==0.61.1
+datasette-copyable==0.3.1
+datasette-vega==0.6.2
+datasette-yaml==0.1.1
 ```
+
+----
 
 ## Support
 Open an issue in the GitHub repository.
  
 ## Roadmap
-- Modify the Project Build Tool created in Chapter 3 of [the book](https://www.minimumviablearchitecture.com) to include the ability to manage Brew, Python, and pip. 
 - Support Linux builds. Is there an advantage to using Homebrew for Linux?
  
 ## How you can help

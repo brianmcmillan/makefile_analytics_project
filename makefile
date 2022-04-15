@@ -38,6 +38,8 @@ LOCAL_PORT := 8001
 
 ############################################################################
 all: initial-documentation ## Executes the default make task.
+install: update init-install init-documentation git-init ## Run once when setting up a new project.
+update: update-macos update-homebrew update-pip-packages ## Updates base software (OS, Homebrew, python, pip)
 
 .FORCE: 
 
@@ -49,13 +51,13 @@ foo:
 ############################################################################
 # Tests                                                                    #
 ############################################################################
-check: ## Executes all test suites.
+# check: ## Executes all test suites.
 
 
 ############################################################################
 # Documentation                                                            #
 ############################################################################
-documentation: build/metadata/makefile_graph.png build/metadata/database_schema.png build/metadata/database_schema.er ## Builds the documentation files for the build. (e.g. schema docs, data flow diagrams)
+# documentation: build/metadata/makefile_graph.png build/metadata/database_schema.png build/metadata/database_schema.er ## Builds the documentation files for the build. (e.g. schema docs, data flow diagrams)
 
 initial-documentation: build/metadata/directory_listing.txt help
 
@@ -70,18 +72,18 @@ build/metadata/directory_listing.txt: .FORCE
 build/metadata/makefile_graph.png: .FORCE
 	$(makefile-graph)
 
-build/metadata/er_relationships.txt: 
-	@echo "REF_CALENDAR_001 1--1 REF_CALENDAR_001" > $@
-	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Created $@\" >> $(LOGFILE)
+# build/metadata/er_relationships.txt: 
+# 	@echo "REF_CALENDAR_001 1--1 REF_CALENDAR_001" > $@
+# 	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Created $@\" >> $(LOGFILE)
 
-build/metadata/database_schema.png: build/metadata/er_relationships.txt .FORCE
-	$(er-diagram)
+# build/metadata/database_schema.png: build/metadata/er_relationships.txt .FORCE
+# 	$(er-diagram)
 
-build/metadata/database_schema.er: build/metadata/er_relationships.txt .FORCE
-	$(er-diagram)
+# build/metadata/database_schema.er: build/metadata/er_relationships.txt .FORCE
+# 	$(er-diagram)
 
-build/metadata/META_TABLES_001: .FORCE
-	$(metadata-tables)
+# build/metadata/META_TABLES_001: .FORCE
+# 	$(metadata-tables)
 
 # list-variables: 
 # 	@echo PYENVDIR - $(PYENVDIR)
@@ -92,16 +94,16 @@ build/metadata/META_TABLES_001: .FORCE
 # Utilities                                                                #
 ############################################################################
 
-compact-database: $(DATABASE-PATH) ## Database maintenance scripts.
-	$(compact-database)
+# compact-database: $(DATABASE-PATH) ## Database maintenance scripts.
+# 	$(compact-database)
 
-backup-database: BACKUPFILEPATH=$(DATABASE-PATH).bak
-backup-database: $(DATABASE-PATH)
-	$(backup-database)
+# backup-database: BACKUPFILEPATH=$(DATABASE-PATH).bak
+# backup-database: $(DATABASE-PATH)
+# 	$(backup-database)
 
-log-rotate: LOGFILEPATH=$(LOGFILE)
-log-rotate: 
-	$(log-rotate)
+# log-rotate: LOGFILEPATH=$(LOGFILE)
+# log-rotate: 
+# 	$(log-rotate)
 
 
 # ############################################################################
@@ -128,11 +130,11 @@ log-rotate:
 # Append the record_count metric to the metric_sample csv file.            #
 # provider_code,node_code,node_qualifier,metric_code,value_dts,metric_value#
 ############################################################################
-calculate-metrics: test-metric_sample_001.csv record_count-REF_CALENDAR_001.csv
+# calculate-metrics: test-metric_sample_001.csv record_count-REF_CALENDAR_001.csv
 
-record_count-REF_CALENDAR_001.csv: TABLENAME=REF_CALENDAR_001
-record_count-REF_CALENDAR_001.csv: metric_sample_001.csv
-	$(metric-record_count)
+# record_count-REF_CALENDAR_001.csv: TABLENAME=REF_CALENDAR_001
+# record_count-REF_CALENDAR_001.csv: metric_sample_001.csv
+# 	$(metric-record_count)
 
 # field_count_check-metric_sample_001.csv: EXPECTED=6
 # field_count_check-metric_sample_001.csv: metric_sample_001.csv
@@ -159,7 +161,7 @@ record_count-REF_CALENDAR_001.csv: metric_sample_001.csv
 # # 	@cp -f config/server/settings.txt deploy/local/settings.txt
 # # 	@cp -f $< deploy/local/$(<F)
 
-deploy-local: test-database
-	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Starting server on http://$(strip $(LOCAL_ADDRESS)):$(LOCAL_PORT)\"
-	$(DATASETTE) $(DATABASE-PATH) --host $(LOCAL_ADDRESS) --port $(LOCAL_PORT) --metadata build/metadata/metadata.yaml -o
+# deploy-local: test-database
+# 	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Starting server on http://$(strip $(LOCAL_ADDRESS)):$(LOCAL_PORT)\"
+# 	$(DATASETTE) $(DATABASE-PATH) --host $(LOCAL_ADDRESS) --port $(LOCAL_PORT) --metadata build/metadata/metadata.yaml -o
 	

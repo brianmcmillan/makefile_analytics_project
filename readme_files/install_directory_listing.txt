@@ -1,0 +1,25 @@
+.
+├── README-TEMPLATE.md
+├── README.md
+├── build
+│   └── metadata
+│       ├── directory_listing.txt
+│       ├── makefile_graph.png
+│       └── makefile_graph.txt
+├── config
+│   ├── homebrew
+│   │   ├── brew_packages_base.txt
+│   │   └── brew_packages_installed.txt
+│   └── python
+│       ├── requirements.txt
+│       └── requirements_base.txt
+├── init_database.mk
+├── init_project.mk
+├── log
+│   └── makefile_analytics_project.log
+├── macros.mk
+├── makefile
+├── templates.mk
+└── variables.mk
+
+6 directories, 16 files
