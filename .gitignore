@@ -4,3 +4,12 @@
 log/makefile_analytics_project.log
 makefile_analytics_project.db-shm
 makefile_analytics_project.db-wal
+build/*
+config/*
+deploy/*
+doc/*
+load/*
+log/*
+src/*
+test/*
+temp/*

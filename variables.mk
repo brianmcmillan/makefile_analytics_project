@@ -57,10 +57,13 @@ HOWTO-FILEDIR := $(PROJECT-PATH)/doc/howto
 REFERENCE-FILEDIR := $(PROJECT-PATH)/doc/reference
 DISCUSSION-FILEDIR := $(PROJECT-PATH)/doc/discussion
 
+# Application load files
+LOAD-FILEDIR := $(PROJECT-PATH)/load
+METRICS-FILEDIR := $(PROJECT-PATH)/load/metric
+LOG-FILEDIR := $(PROJECT-PATH)/load/log
+ERROR-FILEDIR := $(PROJECT-PATH)/load/error
+
 # Application build files
-METRICS-FILEDIR := $(PROJECT-PATH)/build/load/metric
-LOG-FILEDIR := $(PROJECT-PATH)/build/load/log
-ERROR-FILEDIR := $(PROJECT-PATH)/build/load/error
 STATIC-FILEDIR := $(PROJECT-PATH)/build/static
 METADATA-FILEDIR := $(PROJECT-PATH)/build/metadata
 DATABASE-FILEDIR := $(PROJECT-PATH)/build/db
