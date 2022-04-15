@@ -1,7 +1,18 @@
-# ~/Documents/GitHub/makefile_analytics_project/config/make/init.mk
+# ~/Documents/GitHub/makefile_analytics_project/config/make/init_project.mk
 ############################################################################
 # Project initiation                                                       #
 ############################################################################
+install: update init-install init-documentation git-init ## Run once when setting up a new project.
+
+update: update-macos update-homebrew update-pip-packages ## Updates base software (OS, Homebrew, python, pip)
+
+# [WARNING] This will remove all project files and directories.
+uninstall-init: uninstalldirs-init uninstall-init-files
+
+# [WARNING] This will remove the python local virtual environment.
+uninstall-virtualenv: 
+	$(uninstall-virtualenv)
+
 
 ############################################################################
 # Run once                                                                 #
@@ -19,7 +30,9 @@ git-init:
 ############################################################################
 # Installation                                                             #
 ############################################################################
-install: installdirs .gitignore README-TEMPLATE.md config/homebrew/brew_packages_installed.txt install-pip-packages ## Run once when setting up a new project.
+init-install: installdirs .gitignore README-TEMPLATE.md install-pip-packages
+
+init-documentation: config/homebrew/brew_packages_installed.txt build/metadata/makefile_graph.png build/metadata/directory_listing.txt
 
 installdirs: ## Creates the project directories.
 	@mkdir -p $(PROJECTLOGDIR) $(TEMPSTATEDIR) \
@@ -27,8 +40,8 @@ installdirs: ## Creates the project directories.
 	$(BREW-CONFIGDIR) $(PYTHON-CONFIGDIR) $(APPSERVER-CONFIGDIR) $(VIZSERVER-CONFIGDIR) \
 	$(SCHEDULE-CONFIGDIR) $(DATA_SOURCE-CONFIGDIR) $(SEED_DATA-CONFIGDIR) \
 	$(SQL_DLL-CONFIGDIR) $(SQL_DML-CONFIGDIR) $(TUTORIAL-FILEDIR) $(HOWTO-FILEDIR) \
-	$(REFERENCE-FILEDIR) $(DISCUSSION-FILEDIR) $(LOAD-FILEDIR) $(METRICS-FILEDIR) \
-	$(LOG-FILEDIR) $(ERROR-FILEDIR) $(STATIC-FILEDIR) $(METADATA-FILEDIR) $(DATABASE-FILEDIR) \
+	$(REFERENCE-FILEDIR) $(DISCUSSION-FILEDIR) $(LOAD-FILEDIR) $(LOG-FILEDIR) $(ERROR-FILEDIR) \
+	$(METRICS-FILEDIR) $(STATIC-FILEDIR) $(METADATA-FILEDIR) $(DATABASE-FILEDIR) \
 	$(SQL_DQL-FILEDIR) $(LOCAL-DEPLOYMENTDIR) $(CLOUDRUN-DEPLOYMENTDIR) $(SQLITE3-DEPLOYMENTDIR)
 	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Executed $@\" >> $(LOGFILE)
 
@@ -143,8 +156,6 @@ install-python-local-virtualenv:
 ############################################################################
 # Update                                                                   #
 ############################################################################
-update: update-macos update-homebrew update-pip-packages ## Updates base software (OS, Homebrew, python, pip)
-
 update-macos: 
 	$(update-macos)
 
@@ -157,14 +168,22 @@ update-pip-packages: config/python/requirements_base.txt
 ############################################################################
 # Uninstall                                                                #
 ############################################################################
-uninstall-init-files: FILES=.gitignore README-TEMPLATE.md config/homebrew/* config/python/*
+uninstall-init-files: FILES = README-TEMPLATE.md
 uninstall-init-files: 
 	$(uninstall-file-list)
 
-uninstall-virtualenv: 
-	$(uninstall-virtualenv)
-	
 # WARNING: Uninstalling Homebrew *WILL* affect outher applications
 # uninstall-homebrew: .FORCE
 # 	@/bin/bash -c "$$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/uninstall.sh)"
 # 	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Homebrew uninstalled\"
+
+uninstalldirs-init: 
+	@rm -r $(PROJECTLOGDIR) $(TEMPSTATEDIR) \
+	$(SQLITE-SRCDIR) $(TEMPLATE-FILEDIR) $(UNIT-TESTSDIR) $(INTEGRATION-TESTSDIR) \
+	$(BREW-CONFIGDIR) $(PYTHON-CONFIGDIR) $(APPSERVER-CONFIGDIR) $(VIZSERVER-CONFIGDIR) \
+	$(SCHEDULE-CONFIGDIR) $(DATA_SOURCE-CONFIGDIR) $(SEED_DATA-CONFIGDIR) \
+	$(SQL_DLL-CONFIGDIR) $(SQL_DML-CONFIGDIR) $(TUTORIAL-FILEDIR) $(HOWTO-FILEDIR) \
+	$(REFERENCE-FILEDIR) $(DISCUSSION-FILEDIR) $(LOAD-FILEDIR) $(STATIC-FILEDIR) \
+	$(METADATA-FILEDIR) $(DATABASE-FILEDIR) $(SQL_DQL-FILEDIR) $(LOCAL-DEPLOYMENTDIR) \
+	$(CLOUDRUN-DEPLOYMENTDIR) $(SQLITE3-DEPLOYMENTDIR)
+	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Executed $@\" >> $(LOGFILE)

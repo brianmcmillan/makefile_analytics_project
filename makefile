@@ -19,9 +19,9 @@
 
 include macros.mk
 include variables.mk
-include init.mk
-include templates.mk
-include init_database.mk
+include init_project.mk
+# include templates.mk
+# include init_database.mk
 
 ############################################################################
 # Variables                                                                #
@@ -55,7 +55,7 @@ check: ## Executes all test suites.
 ############################################################################
 # Documentation                                                            #
 ############################################################################
-documentation: build/metadata/makefile_graph.png build/metadata/database_schema.png build/metadata/database_schema.er build/metadata/directory_listing.txt  ## Builds the documentation files for the build. (e.g. schema docs, data flow diagrams)
+documentation: build/metadata/makefile_graph.png build/metadata/database_schema.png build/metadata/database_schema.er ## Builds the documentation files for the build. (e.g. schema docs, data flow diagrams)
 
 initial-documentation: build/metadata/directory_listing.txt help
 

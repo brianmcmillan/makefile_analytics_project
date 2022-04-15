@@ -120,7 +120,7 @@ define update-pip-packages
 	@#update-pip-packages{{colon}}{{space}}<path/to/requirements_base.txt>
 	@$(shell pyenv which pip) install --upgrade pip
 	@$(shell pyenv which pip) install -r $<
-	@$(shell pyenv which pip) freeze > config/python/requirements.txt
+	@$(shell pyenv which pip) freeze > $(PYTHON-CONFIGDIR)/requirements.txt
 	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Python pip packages upgraded - requirements.txt\" >> $(LOGFILE)
 endef
 
@@ -134,7 +134,7 @@ define install-pip-packages
 	@#install-pip-packages{{colon}}{{space}}requirements_base.txt install-python-local-virtualenv
 	@$(shell pyenv which pip) install --upgrade pip
 	@$(shell pyenv which pip) install -r $<
-	@$(shell pyenv which pip) freeze > requirements.txt
+	@$(shell pyenv which pip) freeze > $(PYTHON-CONFIGDIR)/requirements.txt
 	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Python pip packages installed - requirements.txt\" >> $(LOGFILE)
 endef
 

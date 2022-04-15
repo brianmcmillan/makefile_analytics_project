@@ -1,7 +1,7 @@
 .DS_Store
 .DS_Store?
 *.DS_Store
-log/makefile_analytics_project.log
+.python-version
 makefile_analytics_project.db-shm
 makefile_analytics_project.db-wal
 build/*

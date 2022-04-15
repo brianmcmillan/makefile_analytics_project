@@ -23,7 +23,7 @@ In general, this could be used as a start for any Python basic project. Specific
  
 ## Usage
 1. Create a directory with the name of your new project within your development environment (e.g., ~/documents/GitHub/).
-1. Copy the makefile from this repository into that directory.
+1. Copy the makefiles from this repository into that directory.
 1. Run `make` to see the tasks in the makefile.
 
 ```makefile
