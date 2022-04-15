@@ -1,8 +1,0 @@
-2022-04-15T19:24:34Z [INFO] installdirs "Executed installdirs"
-2022-04-15T19:24:34Z [INFO] README-TEMPLATE.md "Created README-TEMPLATE.md"
-2022-04-15T19:24:34Z [INFO] config/homebrew/brew_packages_base.txt "Created config/homebrew/brew_packages_base.txt"
-2022-04-15T19:24:34Z [INFO] config/homebrew/brew_packages_installed.txt "Created config/homebrew/brew_packages_installed.txt"
-2022-04-15T19:24:36Z [INFO] config/python/requirements_base.txt "Created config/python/requirements_base.txt"
-2022-04-15T19:24:36Z [INFO] install-python-local-virtualenv "Python location - /Users/brianmcmillan/.pyenv/versions/makefile_analytics_project/bin/python"
-2022-04-15T19:24:36Z [INFO] install-python-local-virtualenv "PIP location - /Users/brianmcmillan/.pyenv/versions/makefile_analytics_project/bin/pip"
-2022-04-15T19:24:36Z [INFO] install-pip-packages "Python pip packages installed - requirements.txt"
