@@ -58,27 +58,27 @@ endef
 
 define create-database
 	@#create-database{{colon}}{{space}}
-	@$(SQLITEUTILS) create-database $(DATABASE) --enable-wal
+	@$(SQLITEUTILS) create-database $(DATABASE-FILEDIR)/$(DATABASE) --enable-wal
 	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Created database in WAL mode - $(DATABASE)\" >> $(LOGFILE)
 endef
 
 define test-database
 	@#test-database{{colon}}{{space}}
-	@[[ -f $(DATABASE-PATH) ]] \
+	@[[ -f $(DATABASE-FILEDIR)/$(DATABASE) ]] \
 	&& true \
-	|| echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [WARNING]    $@     \"testing for $(DATABASE) did not find $(DATABASE-PATH)\" >> $(LOGFILE)
+	|| echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [WARNING]    $@     \"testing for $(DATABASE) did not find $(DATABASE-FILEDIR)/$(DATABASE)\" >> $(LOGFILE)
 endef
 
 define execute-sql
 	@#<verb>-<table_name>{{colon}}{{space}}<path/to/<query_file>.sql> [<path/to/database.db> <dependent tables>]
-	@$(shell $(SQLITE3) $(DATABASE-PATH) ".read $<" ".quit")
+	@$(shell $(SQLITE3) $(DATABASE-FILEDIR)/$(DATABASE) ".read $<" ".quit")
 	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Executed $< on $(DATABASE)\" >> $(LOGFILE)
 endef
 
 define test-table
 	@#test-<table_name>{{colon}}{{space}}TABLENAME=<table_name>
 	@#test-<table_name>{{colon}}{{space}}
-	@[[ $(shell $(SQLITE3) $(DATABASE-PATH) ".tables $(TABLENAME)" ".quit") == $(TABLENAME) ]] \
+	@[[ $(shell $(SQLITE3) $(DATABASE-FILEDIR)/$(DATABASE) ".tables $(TABLENAME)" ".quit") == $(TABLENAME) ]] \
 	&& true \
 	|| echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [FAIL]    $@    \"Table $(TABLENAME) not found\" >> $(LOGFILE)
 endef
@@ -86,24 +86,24 @@ endef
 define record-count-table
 	@#record-count-<table name>{{colon}}{{space}}TABLENAME=<table_name>
 	@#record-count-<table name>{{colon}}{{space}}
-	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"$(shell $(SQLITE3) $(DATABASE-PATH) "SELECT COUNT(*) || ' records in $(DATABASE).$(TABLENAME)' FROM [$(TABLENAME)]" ".quit")\" >> $(LOGFILE)
+	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"$(shell $(SQLITE3) $(DATABASE-FILEDIR)/$(DATABASE) "SELECT COUNT(*) || ' records in $(DATABASE).$(TABLENAME)' FROM [$(TABLENAME)]" ".quit")\" >> $(LOGFILE)
 endef
 
 define er-diagram
 	@#<path/to/diagram.type>{{colon}}{{space}}<path/to/er_relationships.txt>"
 	@#Types can be er, pdf, png, dot
-	@$(ERALCHEMY) -i sqlite:///$(DATABASE-PATH) -o tmp/$(subst .,,$(notdir $(DATABASE-PATH))).er
-	@cat tmp/$(subst .,,$(notdir $(DATABASE-PATH))).er $< > tmp/$(subst .,,$(notdir $(DATABASE-PATH)))_2.er || true
-	@$(ERALCHEMY) -i tmp/$(subst .,,$(notdir $(DATABASE-PATH)))_2.er -o $@
-	@rm -f tmp/$(subst .,,$(notdir $(DATABASE-PATH)))*.er
+	@$(ERALCHEMY) -i sqlite:///$(DATABASE-FILEDIR)/$(DATABASE) -o tmp/$(subst .,,$(notdir $(DATABASE-FILEDIR)/$(DATABASE))).er
+	@cat tmp/$(subst .,,$(notdir $(DATABASE-FILEDIR)/$(DATABASE))).er $< > tmp/$(subst .,,$(notdir $(DATABASE-FILEDIR)/$(DATABASE)))_2.er || true
+	@$(ERALCHEMY) -i tmp/$(subst .,,$(notdir $(DATABASE-FILEDIR)/$(DATABASE)))_2.er -o $@
+	@rm -f tmp/$(subst .,,$(notdir $(DATABASE-FILEDIR)/$(DATABASE)))*.er
 	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Executed er-digram and exported to $@\" >> $(LOGFILE)
 endef
 
 define metric-record_count
 	@#record_count-<TABLE_NAME.CSV>{{colon}}{{space}}TABLENAME=<TABLE_NAME>
 	@#record_count-<TABLE_NAME.CSV>{{colon}}{{space}}<path/to/metric_sample.csv>
-	@echo $(PROJECT-PATH)/$(firstword $(MAKEFILE_LIST)).$@,$(DATABASE).$(TABLENAME),"COUNT",record_count,$(shell date -u +"%Y-%m-%dT%H:%M:%SZ"),$(shell $(SQLITE3) $(DATABASE-PATH) "SELECT COUNT(*) FROM [$(TABLENAME)]" ".quit") >> $<
-	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Record count in $(DATABASE).$(TABLENAME) - $(shell $(SQLITE3) $(DATABASE-PATH) "SELECT COUNT(*) FROM [$(TABLENAME)]" ".quit")\" >> $(LOGFILE)
+	@echo $(PROJECT-PATH)/$(firstword $(MAKEFILE_LIST)).$@,$(DATABASE).$(TABLENAME),"COUNT",record_count,$(shell date -u +"%Y-%m-%dT%H:%M:%SZ"),$(shell $(SQLITE3) $(DATABASE-FILEDIR)/$(DATABASE) "SELECT COUNT(*) FROM [$(TABLENAME)]" ".quit") >> $<
+	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Record count in $(DATABASE).$(TABLENAME) - $(shell $(SQLITE3) $(DATABASE-FILEDIR)/$(DATABASE) "SELECT COUNT(*) FROM [$(TABLENAME)]" ".quit")\" >> $(LOGFILE)
 endef	
 
 define update-homebrew
@@ -175,11 +175,11 @@ endef
 
 define metadata-tables
 	@#META_TABLES_001{{colon}}{{space}}
-	@$(SQLITE3) $(DATABASE-PATH) "DROP TABLE IF EXISTS '_analyze_tables_';" ".quit"
-	@$(SQLITE3) $(DATABASE-PATH) "DROP TABLE IF EXISTS 'META_TABLES_001';" ".quit"
-	@$(SQLITEUTILS) analyze-tables $(DATABASE-PATH) --save
-	@$(SQLITE3) $(DATABASE-PATH) "ALTER TABLE '_analyze_tables_' RENAME TO 'META_TABLES_001';" ".quit"
-	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"$(shell $(SQLITE3) $(DATABASE-PATH) "SELECT COUNT(*) || ' records in $(DATABASE).META_TABLES_001' FROM META_TABLES_001" ".quit")\" >> $(LOGFILE)
+	@$(SQLITE3) $(DATABASE-FILEDIR)/$(DATABASE) "DROP TABLE IF EXISTS '_analyze_tables_';" ".quit"
+	@$(SQLITE3) $(DATABASE-FILEDIR)/$(DATABASE) "DROP TABLE IF EXISTS 'META_TABLES_001';" ".quit"
+	@$(SQLITEUTILS) analyze-tables $(DATABASE-FILEDIR)/$(DATABASE) --save
+	@$(SQLITE3) $(DATABASE-FILEDIR)/$(DATABASE) "ALTER TABLE '_analyze_tables_' RENAME TO 'META_TABLES_001';" ".quit"
+	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"$(shell $(SQLITE3) $(DATABASE-FILEDIR)/$(DATABASE) "SELECT COUNT(*) || ' records in $(DATABASE).META_TABLES_001' FROM META_TABLES_001" ".quit")\" >> $(LOGFILE)
 endef
 
 define csv_field_count_check

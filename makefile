@@ -20,8 +20,8 @@
 include macros.mk
 include variables.mk
 #include init_project.mk
-include templates.mk
-# include init_database.mk
+#include templates.mk
+include init_database.mk
 
 ############################################################################
 # Variables                                                                #
@@ -41,13 +41,14 @@ all: initial-documentation ## Executes the default make task.
 install: update init-install init-documentation git-init ## Run once when setting up a new project.
 update: update-macos update-homebrew update-pip-packages ## Updates base software (OS, Homebrew, python, pip)
 install-templates: create-templates ## Installs the project template files.
+install-database: test-database test-REF_CALENDAR_001 test-META_TABLES_001 document-database compact-database backup-database ## Creates the initial project database.
 
 .FORCE: 
 
 .PHONY: 
 
 foo:
-	echo $(LOGFILE)
+	echo $(DATABASE-FILEDIR)
 
 ############################################################################
 # Tests                                                                    #
@@ -73,18 +74,7 @@ build/metadata/directory_listing.txt: .FORCE
 build/metadata/makefile_graph.png: .FORCE
 	$(makefile-graph)
 
-# build/metadata/er_relationships.txt: 
-# 	@echo "REF_CALENDAR_001 1--1 REF_CALENDAR_001" > $@
-# 	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Created $@\" >> $(LOGFILE)
 
-# build/metadata/database_schema.png: build/metadata/er_relationships.txt .FORCE
-# 	$(er-diagram)
-
-# build/metadata/database_schema.er: build/metadata/er_relationships.txt .FORCE
-# 	$(er-diagram)
-
-# build/metadata/META_TABLES_001: .FORCE
-# 	$(metadata-tables)
 
 # list-variables: 
 # 	@echo PYENVDIR - $(PYENVDIR)
@@ -119,36 +109,8 @@ build/metadata/makefile_graph.png: .FORCE
 # uninstall-files: 
 # 	$(uninstall-file-list)
 
-# # uninstall-database: FILES=*.db *.db-* database_schema.* er_relationships.txt *.er REF_CALENDAR_001_create.sql
-# # uninstall-database: 
-# # 	$(uninstall-file-list)
 
-# # uninstall-virtualenv: 
-# # 	$(uninstall-virtualenv)
 
-############################################################################
-# Collect Metrics                                                          #
-# Append the record_count metric to the metric_sample csv file.            #
-# provider_code,node_code,node_qualifier,metric_code,value_dts,metric_value#
-############################################################################
-# calculate-metrics: test-metric_sample_001.csv record_count-REF_CALENDAR_001.csv
-
-# record_count-REF_CALENDAR_001.csv: TABLENAME=REF_CALENDAR_001
-# record_count-REF_CALENDAR_001.csv: metric_sample_001.csv
-# 	$(metric-record_count)
-
-# field_count_check-metric_sample_001.csv: EXPECTED=6
-# field_count_check-metric_sample_001.csv: metric_sample_001.csv
-# 	$(csv_field_count_check)
-
-# number_check-metric_sample_001.csv: COLUMN=6
-# number_check-metric_sample_001.csv: metric_sample_001.csv
-# 	$(csv_number_check)
-
-# regex_check-metric_sample_001.csv-C3: COLUMN=3
-# regex_check-metric_sample_001.csv-C3: REGEX=^[[:space:]\"a-zA-Z0-9\/,.:_-]+$$
-# regex_check-metric_sample_001.csv-C3: metric_sample_001.csv
-# 	$(csv_regex_check)
 
 # ############################################################################
 # # Deployment                                                               #

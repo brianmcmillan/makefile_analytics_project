@@ -8,7 +8,7 @@ PYTHON-VERSION := 3.10.2
 PROJECT-PATH := $(shell pwd)
 PROJECT-NAME := $(notdir $(shell pwd))
 DATABASE := $(PROJECT-NAME).db
-DATABASE-PATH :=$(PROJECT-PATH)/$(PROJECT-NAME).db
+DATABASE-PATH := $(DATABASE-FILEDIR)/$(PROJECT-NAME).db
 
 # Program locations (which <utility>)
 SHELL := /bin/bash

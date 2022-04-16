@@ -2,13 +2,12 @@
 ############################################################################
 # Database initiation                                                      #
 ############################################################################
-init-database: test-database test-REF_CALENDAR_001 test-META_TABLES_001
+# install-database: test-database test-REF_CALENDAR_001 test-META_TABLES_001
 
 ############################################################################
 # Tests                                                                    #
 ############################################################################
-check-database: test-database test-database_schema.png test-database_schema.er \
-test-REF_CALENDAR_001 test-META_TABLES_001	
+check-database: test-database test-REF_CALENDAR_001 test-META_TABLES_001	
 
 test-database: create-database
 	$(test-database)
@@ -18,9 +17,8 @@ test-REF_CALENDAR_001: create-REF_CALENDAR_001 config/sql_ddl/REF_CALENDAR_001_c
 	$(test-table)
 
 test-META_TABLES_001: TABLENAME = META_TABLES_001
-test-META_TABLES_001: META_TABLES_001
+test-META_TABLES_001: build/metadata/META_TABLES_001
 	$(test-table)
-
 
 ############################################################################
 # Create database                                                      #
@@ -29,18 +27,48 @@ create-database:
 	$(create-database)
 
 ############################################################################
+# Utilities                                                                #
+############################################################################
+
+compact-database: $(DATABASE-FILEDIR)/$(DATABASE) ## Database maintenance scripts.
+	$(compact-database)
+
+backup-database: BACKUPFILEPATH=$(DATABASE-FILEDIR)/$(DATABASE).bak
+backup-database: $(DATABASE-FILEDIR)/$(DATABASE)
+	$(backup-database)	
+
+############################################################################
 # Create initial tables                                                    #
 ############################################################################
 # Create the default project database 
-init-tables: metric-REF_CALENDAR_001 META_TABLES_001 check-database
+init-tables: metric-REF_CALENDAR_001 META_TABLES_001 check-database document-database
 
 # Create database reference tables 
-create-REF_CALENDAR_001: REF_CALENDAR_001_create.sql 
+create-REF_CALENDAR_001: config/sql_ddl/REF_CALENDAR_001_create.sql
 	$(execute-sql)
 
 metric-REF_CALENDAR_001: TABLENAME=REF_CALENDAR_001
 metric-REF_CALENDAR_001: test-REF_CALENDAR_001
 	$(record-count-table)
+
+############################################################################
+# Document database and collect metadata                                   #
+############################################################################
+document-database: build/metadata/database_schema.png build/metadata/database_schema.er \
+build/metadata/directory_listing.txt build/metadata/makefile_graph.png
+
+build/metadata/er_relationships.txt: 
+	@echo "REF_CALENDAR_001 1--1 REF_CALENDAR_001" > $@
+	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Created $@\" >> $(LOGFILE)
+
+build/metadata/database_schema.png: build/metadata/er_relationships.txt .FORCE
+	$(er-diagram)
+
+build/metadata/database_schema.er: build/metadata/er_relationships.txt .FORCE
+	$(er-diagram)
+
+build/metadata/META_TABLES_001: .FORCE
+	$(metadata-tables)
 
 ############################################################################
 # Data seeds and queries                                                   #
@@ -102,18 +130,10 @@ config/sql_ddl/er_relationships.txt:
 	@echo "REF_CALENDAR_001 1--1 REF_CALENDAR_001" > $@
 	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Created $@\" >> $(LOGFILE)
 
-############################################################################
-# Create standard load files                                               #
-############################################################################
-
-build/load/metric/metric_sample_001.csv: 
-	@echo provider_code,node_code,node_qualifier,metric_code,value_dts,metric_value > $@
-	@echo $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")    [INFO]    $@    \"Created $@\" >> $(LOGFILE)
-
 
 ############################################################################
 # Uninstall                                                                #
 ############################################################################
-uninstall-database: FILES=*.db *.db-* database_schema.* er_relationships.txt *.er config/sql_ddl/REF_CALENDAR_001_create.sql
+uninstall-database: FILES=build/db/*.db build/db/*.db-* build/metadata/database_schema.* build/metadata/er_relationships.txt *.er config/sql_ddl/REF_CALENDAR_001_create.sql
 uninstall-database: 
 	$(uninstall-file-list)	
