@@ -4,7 +4,7 @@ This project is a [makefile](https://www.gnu.org/software/make/) for macOS syste
 
 This project grew out of the desire to improve the manual process to set up the development environment described in the book [Building Data Products: Data and Analytics Engineering for non-programmers.(https://www.minimumviablearchitecture.com)
 
-**NOTE:** Setting up a Python environment that works today and a year from now can be incredibly frustrating if you are new to Python. I hope this helps.
+**NOTE:** Setting up a Python environment that works today *and* a year from now can be incredibly frustrating if you are new to Python. I hope this helps.
  
 ## Project Status
 **ACTIVE**
@@ -139,7 +139,7 @@ This will:
 - Updates the `pip` packages defined in the `requirements_base.txt:` task.
 - Updates the documentation of the project.
 
-One important thing to note is that the instalation of the `pip` packages is managed through the `init_project` makefile and the `config/python/requirements_base.txt:` target. Do not edit the `requirements.txt` file directly. Another thing to note is that the software versions are explicitely set. This will minimize the likelihood that you will have conflicting versions of the packages at the time they were defined. Periodically, you will want to upgrade the packages and add new ones and that should also be done through the makefile target. 
+One important thing to note is that the installation of the `pip` packages is managed through the `init_project` makefile and the `config/python/requirements_base.txt:` target. **Do not edit** the `requirements.txt` file directly. Another thing to note is that the software versions are explicitly set. This will minimize the likelihood that you will have conflicting versions of the packages at the time they were defined. Periodically, you will want to upgrade the packages and add new ones and that should also be done through the makefile target. 
 
 **requirements_base.txt:**
 ```text
@@ -242,5 +242,3 @@ The types of relationships are defined using the following patterns:
 * - 0 or more
 + - 1 or more
 ```
-
-
